@@ -34,7 +34,7 @@
                   <i>￥90</i>
                   <i class="select-icon"></i>
                 </span>
-              <span class="lineh5">更多日期</span>
+              <span class="lineh5" @click="moreDateClick(0)">更多日期</span>
             </div>
           </div>
           <div class="number">
@@ -76,7 +76,7 @@
                   <i>￥90</i>
                   <i class="select-icon"></i>
                 </span>
-              <span class="lineh5">更多日期</span>
+              <span class="lineh5" @click="moreDateClick(1)">更多日期</span>
             </div>
           </div>
           <div class="number">
@@ -107,19 +107,21 @@
           <div class="infoError">
             <span>姓名</span>
             <span class="errMsg">生僻字可用拼音代替</span>
-            <input class="searchInput" name="contactName" type="text" placeholder="必填">
+            <input class="searchInput" name="contactName" v-model="ticketInfo.contactName" type="text" placeholder="必填">
             <i class="inputRemove"></i>
           </div>
           <div>
             <span class="width-auto">姓(拼音)</span>
             <span class="errMsg">请输入姓(拼音)</span>
-            <input name="contactLastName" class="searchInput" type="text" placeholder="例：李，填Li">
+            <input name="contactLastName" v-model="ticketInfo.contactLastName" class="searchInput" type="text"
+                   placeholder="例：李，填Li">
             <i class="inputRemove"></i>
           </div>
           <div>
             <span class="width-auto">名(拼音)</span>
             <span class="errMsg">请输入名(拼音)</span>
-            <input name="contactFirstName" class="searchInput" type="text" placeholder="例：明，填Ming">
+            <input name="contactFirstName" v-model="ticketInfo.contactFirstName" class="searchInput" type="text"
+                   placeholder="例：明，填Ming">
             <i class="inputRemove"></i>
           </div>
           <div class="gender">
@@ -131,7 +133,7 @@
           <div>
             <span>手机号</span>
             <span class="errMsg">请输入正确的手机号</span>
-            <input name="contactMobile" type="tel" placeholder="接收取票短信凭证" maxlength="13">
+            <input name="contactMobile" v-model="ticketInfo.contactMobile" type="tel" placeholder="接收取票短信凭证" maxlength="13">
             <i class="inputRemove"></i>
             <!--<div class="gray able">发送验证码</div>-->
             <!--<div class="reCount">60秒后重发</div>-->
@@ -140,7 +142,7 @@
           <div>
             <span>邮箱</span>
             <span class="errMsg">请输入正确的邮箱</span>
-            <input name="contactMobile" type="tel" placeholder="用于接收协议等">
+            <input name="contactEmail" v-model="ticketInfo.contactEmail" type="tel" placeholder="用于接收协议等">
             <i class="inputRemove"></i>
           </div>
           <div class="gender">
@@ -152,7 +154,8 @@
           <div class="id-card">
             <span>身份证<i></i></span>
             <span class="errMsg">请输入正确的证件号</span>
-            <input name="contactIdNo" class="searchInput" type="search" placeholder="用于景区入园等凭证" maxlength="20">
+            <input name="contactIdNo" v-model="ticketInfo.contactIdNo" class="searchInput" type="search"
+                   placeholder="用于景区入园等凭证" maxlength="20">
             <i class="inputRemove"></i>
           </div>
           <div>
@@ -175,13 +178,13 @@
           <div class="infoError">
             <span>收件人</span>
             <span class="errMsg">请输入收件人</span>
-            <input class="searchInput" name="contactName" type="text" placeholder="必填">
+            <input class="searchInput" name="contactName" v-model="mailInfo.contactName" type="text" placeholder="必填">
             <i class="inputRemove"></i>
           </div>
           <div>
             <span class="width-auto">手机号</span>
             <span class="errMsg">请输入收件人手机号码</span>
-            <input name="contactLastName" class="searchInput" type="text" placeholder="必填">
+            <input name="contactMobile" v-model="mailInfo.contactMobile" class="searchInput" type="text" placeholder="必填">
             <i class="inputRemove"></i>
           </div>
           <div class="infoError">
@@ -189,15 +192,15 @@
             <span class="errMsg">请选择所在地</span>
             <i class="arrow-right"></i>
           </div>
-          <div class="addressdes">
+          <div class="addresses">
             <span class="width-auto">详细地址</span>
             <span class="errMsg">请输入详细地址</span>
-            <textarea class="addressdes"></textarea>
+            <textarea class="addresses" v-model="mailInfo.addresses"></textarea>
           </div>
           <div>
             <span>邮政编码</span>
             <span class="errMsg">请输入正确的邮箱</span>
-            <input name="contactMobile" type="tel" placeholder="用于接收协议等">
+            <input name="contactZip" v-model="mailInfo.contactZip" type="tel" placeholder="用于接收协议等">
             <i class="inputRemove"></i>
           </div>
           <div>
@@ -267,7 +270,57 @@
     },
     data () {
       return {
-        c_PageShow: false
+        c_PageShow: false,
+
+        //取票人信息
+        ticketInfo: {
+          //姓名
+          contactName: '张三',
+
+          //姓
+          contactLastName: '张',
+
+          //名
+          contactFirstName: '三',
+
+          //人群
+          //TODO
+
+          //手机号
+          contactMobile: '136',
+
+          //邮箱
+          contactEmail: 'qq',
+
+          //性别
+          //TODO
+
+          //身份证
+          contactIdNo: '341',
+
+          //出生年月
+          //TODO
+        },
+
+        //邮寄地址信息
+        mailInfo: {
+          //收件人
+          contactName:"李四",
+
+          //手机号
+          contactMobile:"136",
+
+          //所在地
+          //TODO
+
+          //详细地址
+          addresses: "真北路",
+
+          //邮政编码
+          contactZip: "200000",
+
+          //快递
+        },
       }
     },
     mounted () {
@@ -276,7 +329,15 @@
         console.log(this.$route.query.id)
       }, 200)
     },
-    methods: {}
+    methods: {
+      moreDateClick: function (index) {
+        this.$router.push('/ticketordercalendar')
+        sessionStorage.setItem('orderinfo', JSON.stringify({
+
+          // TODO 以下依次类推
+        }))
+      }
+    }
   }
 </script>
 
@@ -798,7 +859,7 @@
             width: 60%;
           }
         }
-        &.addressdes {
+        &.addresses {
           height: 66px;
           span {
             &:first-child {

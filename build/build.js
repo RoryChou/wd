@@ -1,48 +1,41 @@
+'use strict'
 require('./check-versions')()
-let fs = require('fs')
-let path = require('path')
 
-process.env.NODE_ENV = 'production'
+// process.env.NODE_ENV = 'production'
 
-let ora = require('ora')
-let webpackRunnerConfig = require('./webpack.prod.conf')
-// let spinner = ora('building for production...')
-let WebpackRunner = require('./WebpackRunner')
-// // 基础文件夹
-let basePath = '../busi'
+const ora = require('ora')
+const rm = require('rimraf')
+const path = require('path')
+const chalk = require('chalk')
+const webpack = require('webpack')
+const config = require('../config')
+const webpackConfig = require('./webpack.prod.conf')
 
-/**
- * 初始化函数，获得命令后面的参数，扫描文件夹，建立任务列表
- */
-let init = function () {
-	let arvs = process.argv.slice(2)
-	// 校验参数正确性
-	if (!validateCmdParam(arvs))
-		return
+const spinner = ora(`building for ${process.env.NODE_ENV}...`)
+spinner.start()
 
-	// spinner.start()
-	new WebpackRunner(basePath, arvs, webpackRunnerConfig).run()
-}
+rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
+  if (err) throw err
+  webpack(webpackConfig, (err, stats) => {
+    spinner.stop()
+    if (err) throw err
+    process.stdout.write(stats.toString({
+      colors: true,
+      modules: false,
+      children: false, // If you are using ts-loader, setting this to true will make TypeScript errors show up during build.
+      chunks: false,
+      chunkModules: false
+    }) + '\n\n')
 
-/**
- *  检验参数合法性，标准写法为：node build/build.js pagePath
- * 1.参数不能为空，如：node build/build.js
- * 2.指定的目录必须存在，如：node build/build.js xxx  ,但是xxx是不存在的
- * @param {*} params 命令后面的参数列表
- */
-let validateCmdParam = function (params) {
-	let result = true
-	if (params.length == 0) {
-		console.log('参数不能为空，正确的格式为：node build/build.js pagePath')
-		result = false
-	} else if (params.length > 0 && params[0].toLowerCase() !== 'all') {
-		let absolutePath = path.resolve(__dirname, basePath, params[0])
-		if (!fs.existsSync(absolutePath)) {
-			console.log('路径不存在')
-			result = false
-		}
-	}
-	return result
-}
+    if (stats.hasErrors()) {
+      console.log(chalk.red('  Build failed with errors.\n'))
+      process.exit(1)
+    }
 
-init()
+    console.log(chalk.cyan('  Build complete.\n'))
+    console.log(chalk.yellow(
+      '  Tip: built files are meant to be served over an HTTP server.\n' +
+      '  Opening index.html over file:// won\'t work.\n'
+    ))
+  })
+})

@@ -119,7 +119,7 @@
         </div>
         <div class="weui-flex__item">
           <div class="link-wrap">
-            <a{{categoryTypeList[2]}}</a>
+            <a>{{categoryTypeList[2]}}</a>
           </div>
           <div class="link-wrap">
             <a>{{categoryTypeList[3]}}</a>

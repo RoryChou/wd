@@ -7,7 +7,7 @@
                 <div class="page-panel" ref="pagePanel" @scroll="handleScroll">
                     <!-- 轮播图和搜索框 -->
                     <swiper1 :advertiseList="advertiseList">
-                        <search-box slot="search_box"/>
+                        <search-box v-if="categoryTypeList.length > 0" slot="search_box"/>
                     </swiper1>
                     <!-- 公告栏 -->
                     <!-- <notice-box/> -->
@@ -48,16 +48,16 @@
     },
     data () {
       return {
-        scrollTop: 0,//滚动距离
-        clientHeight: 0,//窗口高度
-        scrollHeight: 0,//页面高度
+        scrollTop: 0, // 滚动距离
+        clientHeight: 0, // 窗口高度
+        scrollHeight: 0, // 页面高度
         lastTime: 0,
-        wxTopStyle: '',//首页头部距离顶部距离
-        userId: location.search.split('=')[1] - 0,//分销商id
-        storeDto: {},//店铺信息
-        advertiseList: [],//广告列表
-        categoryTypeList: [],//品类列表入口
-        hotSaleList: []//热销产品列表
+        wxTopStyle: '', // 首页头部距离顶部距离
+        userId: location.search.split('=')[1] - 0, // 分销商id
+        storeDto: {}, // 店铺信息
+        advertiseList: [], // 广告列表
+        categoryTypeList: [], // 品类列表入口
+        hotSaleList: []// 热销产品列表
       }
     },
     mounted () {
@@ -104,12 +104,12 @@
           if (res && res.data && res.data.result) {
             let result = res.data.result
             self.storeDto = {
-              storeId: result.storeId,//店铺id
-              storeName: result.storeName,//店铺名称
-              storeLogo: result.storeLogo,//店铺logo
-              appQrcodeUrl: result.appQrcodeUrl,//店铺公众号二维码
-              categoryIds: result.categoryId,//店铺支持的品类
-              contactMobile: result.contactMobile//店铺客服电话
+              storeId: result.storeId, // 店铺id
+              storeName: result.storeName, // 店铺名称
+              storeLogo: result.storeLogo, // 店铺logo
+              appQrcodeUrl: result.appQrcodeUrl, // 店铺公众号二维码
+              categoryIds: result.categoryId, // 店铺支持的品类
+              contactMobile: result.contactMobile// 店铺客服电话
             }
             utils.setTitle(self.storeDto.storeName)
             sessionStorage.setItem('storeId', self.storeDto.storeId)// 传storeId给个人中心
@@ -162,12 +162,12 @@
             let result = res.data.infos
             result.forEach((item, index) => {
               let advertise = {
-                advertiseImageUrl: item.advertiseImageUrl,//广告位图片
-                advertiseTitle: item.advertiseTitle,//广告位标题
-                advertiseLink: item.advertiseLink,//广告位链接
-                showLocation: item.showLocation,//广告位位置（PAGETOP：页面头部）
-                showType: item.showType,//广告位展示方式（CAROUSEL：轮播显示）
-                sortFlag: item.sortFlag//排序标记
+                advertiseImageUrl: item.advertiseImageUrl, // 广告位图片
+                advertiseTitle: item.advertiseTitle, // 广告位标题
+                advertiseLink: item.advertiseLink, // 广告位链接
+                showLocation: item.showLocation, // 广告位位置（PAGETOP：页面头部）
+                showType: item.showType, // 广告位展示方式（CAROUSEL：轮播显示）
+                sortFlag: item.sortFlag// 排序标记
               }
               self.advertiseList.push(advertise)
             })
@@ -192,7 +192,7 @@
           }
         })
       },
-      //滚动触发
+      // 滚动触发
       handleScroll (ev) {
         let currentTime = new Date().getTime()
         // if ((currentTime - this.lastTime) > 200) {
@@ -203,7 +203,7 @@
         this.clientHeight = ev.target.clientHeight
         console.log('滚动距离：' + this.scrollTop)
       },
-      //被子组件监听触发
+      // 被子组件监听触发
       handleTabToTop (dis) {
         console.log(dis)
         if (dis > 44) {
@@ -227,4 +227,3 @@
         padding: 50px 0 48px;
     }
 </style>
-

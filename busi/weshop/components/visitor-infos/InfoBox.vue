@@ -24,31 +24,31 @@
         disX: 0,
         disY: 0,
         deleteSlider: '',
-          mobile:'',
-          cardType :'',
-          cardNumber :''
+          mobile: '',
+          cardType: '',
+          cardNumber: ''
       }
     },
-      mounted(){
+      mounted () {
           this.init()
       },
     props: {
       model: Object
     },
     methods: {
-        init:function () {
-          //初始化手机号
-            if(this.model!=null && this.model.visitorMobile!=null){
-              var mobile = this.model.mobileNum;
+        init: function () {
+          // 初始化手机号
+            if (this.model != null && this.model.visitorMobile != null) {
+              var mobile = this.model.mobileNum
               if (this.model.regionNum == '86') {
-                //国内手机号(86的)显示规则：中间四位****号显示
+                // 国内手机号(86的)显示规则：中间四位****号显示
                 this.mobile = mobile.substr(0, 3)
                 for (var i = 0; i < mobile.length - 7; i++) {
                   this.mobile += '*'
                 }
                 this.mobile += mobile.substr(-4)
               } else {
-                //境外（非86的）显示规则：手机号位数小于或者是等于5位时，全部都是星号显示，大于5位时，前面两位和最后两位显示，中间部分星号
+                // 境外（非86的）显示规则：手机号位数小于或者是等于5位时，全部都是星号显示，大于5位时，前面两位和最后两位显示，中间部分星号
                 if (mobile.length < 6) {
                   for (var i = 0; i < mobile.length; i++) {
                     this.mobile += '*'
@@ -62,7 +62,7 @@
                 }
               }
             }
-          //初始化证件号
+          // 初始化证件号
           if (this.model != null && this.model.visitorCardRelation != null) {
             this.cardType = this.model.visitorCardRelation[0].type
             var cardNum = this.model.visitorCardRelation[0].cardNumber + ''
@@ -74,7 +74,6 @@
             }
             this.cardNumber += cardNum.substr(-1)
           }
-
         },
       touchStart (ev) {
         ev = ev || event

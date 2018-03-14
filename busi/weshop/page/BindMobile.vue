@@ -63,12 +63,12 @@
         getCodeTxt: '获取验证码',
         toRoute: '/my',
         vcCodeTxt: '',
-        errorCode:[
-          {code:"member-0100",message:"手机号格式不正确"},
-          {code:"member-0101",message:"该手机号已绑定过店铺，请更换手机号"},
-          {code:"member-0102",message:"验证码错误或失效，请重新输入"},
-          {code:"member-0103",message:"账户异常，绑定失败，请24小时后重新绑定"},
-          {code:"member-0104",message:"您的发送频率过高，请稍后重试"},
+        errorCode: [
+          {code: 'member-0100', message: '手机号格式不正确'},
+          {code: 'member-0101', message: '该手机号已绑定过店铺，请更换手机号'},
+          {code: 'member-0102', message: '验证码错误或失效，请重新输入'},
+          {code: 'member-0103', message: '账户异常，绑定失败，请24小时后重新绑定'},
+          {code: 'member-0104', message: '您的发送频率过高，请稍后重试'}
         ]
       }
     },
@@ -81,7 +81,7 @@
       init: function () {
         utils.setTitle('绑定手机')
         this.toRoute = this.$route.query.routeTo
-        var memberId = this.$route.query.memberId
+        let memberId = this.$route.query.memberId
         if (memberId) {
           sessionStorage.setItem('isLogin', true)
         }
@@ -99,6 +99,8 @@
         }
         this.mobileTouch = true
         if (!this.mobileErrShow) {
+          this.secs = 60
+          this.rollTime()
           // 发验证码
           axios.post(cm.bindMobile.sendMobileAuthCode, {
             mobile: this.mobile
@@ -107,18 +109,17 @@
               if (response.data.success) {
                 this.showMessage = '验证码已发送请注意查收游霸平台发送的短信'
                 this.dlgShow = true
-                this.secs = 60
-                this.rollTime()
-              }else if(response.data.status=="FAIL"){
-                if(response.data.code=="member-0103"){
-                  that.showMessage="账户异常，获取验证码失败，请24小时后重新获取";
-				  that.dlgShow = true
-                }else
-                  that.showMessage=that.getErrorMsg(response.data.code);
-                  that.dlgShow = true
-              }else{
-                that.showMessage=response.data.message;
-                that.dlgShow = true
+              } else if (response.data.status === 'FAIL') {
+                if (response.data.code === 'member-0103') {
+                  this.showMessage = '账户异常，获取验证码失败，请24小时后重新获取'
+                  this.dlgShow = true
+                } else {
+                  this.showMessage = this.getErrorMsg(response.data.code)
+                }
+                this.dlgShow = true
+              } else {
+                this.showMessage = response.data.message
+                this.dlgShow = true
               }
             })
             .catch((error) => {
@@ -147,13 +148,13 @@
               alert('手机绑定成功')
               // 跳转到我的页面
               that.$router.push({path: '/my'})
-            }else if(response.data.status=="FAIL"){
-                that.showMessage=that.getErrorMsg(response.data.code);
-                that.dlgShow = true
-              }else{
-                that.showMessage=response.data.message;
-                that.dlgShow = true
-              }
+            } else if (response.data.status === 'FAIL') {
+              that.showMessage = that.getErrorMsg(response.data.code)
+              that.dlgShow = true
+            } else {
+              that.showMessage = response.data.message
+              that.dlgShow = true
+            }
           })
             .catch(function (error) {
               console.log(error)
@@ -508,4 +509,3 @@
         color: #0BB20C;
     }
 </style>
-

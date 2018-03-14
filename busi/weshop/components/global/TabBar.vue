@@ -64,6 +64,9 @@
 
     .weui-tabbar {
         position: fixed;
+        width: 5rem;
+        left: 50%;
+        margin-left: -2.5rem;
     }
 
     .weui-tabbar {

@@ -14,6 +14,10 @@ const SelectRegion = () => import('@/page/SelectRegion')
 const MyOrders = () => import('@/page/MyOrders')
 const TicketDetail = () => import('@/page/TicketDetail')
 const TicketIntroduction = () => import('@/page/TicketIntroduction')
+const TicketOrderCalendar = () => import('@/page/TicketOrderCalendar')
+const TicketOrder = () => import('@/page/TicketOrder')
+const ShopClose = () => import('@/page/error/ShopClose')
+const ServerError = () => import('@/page/error/ServerError')
 
 export default new Router({
   routes: [
@@ -63,14 +67,34 @@ export default new Router({
       component: MyOrders
     },
     {
-      path: '/ticketdetail',
+      path: '/ticket/detail',
       name: 'ticketdetail',
       component: TicketDetail
     },
     {
-      path: '/ticketintroduction',
+      path: '/ticket/introduction',
       name: 'ticketintroduction',
       component: TicketIntroduction
+    },
+    {
+      path: '/error/shopclose',
+      name: 'shopclose',
+      component: ShopClose
+    },
+    {
+      path: '/error/500',
+      name: 'servererror',
+      component: ServerError
+    },
+    {
+      path: '/ticket/order',
+      name: 'ticketorder',
+      component: TicketOrder
+    },
+    {
+      path: '/ticket/ordercalendar',
+      name: 'ticketordercalendar',
+      component: TicketOrderCalendar
     }
   ],
   scrollBehavior (to, from, savedPosition) {
