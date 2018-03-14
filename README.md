@@ -24,4 +24,4 @@
 待补充
 
 ## eslint相关
-构建的时候很可能会出现eslint报错信息，如果使用vscode编辑器，建议装ESLint插件，它会检测.eslinttrc配置文件，当不符合规则的时候，会有提示
+构建的时候很可能会出现eslint报错信息，如果使用vscode编辑器，建议装ESLint插件，它会检测.eslinttrc配置文件，当不符合规则的时候，会有提示。
