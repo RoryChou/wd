@@ -65,6 +65,34 @@
     },
     mounted () {
       let self = this
+
+      let active = null
+      let activeDateStr = '2018-03-20'
+
+      //获取门票ID
+      let orderinfoStr = sessionStorage.getItem('orderinfo')
+      if (orderinfoStr) {
+        let orderinfo = JSON.parse(orderinfoStr)
+        console.log(orderinfo)
+
+        let ticketId = orderinfo.ticketActive.id
+
+        let ticketList = orderinfo.ticketList
+        for (let i = 0; i < ticketList.length; i++) {
+          let ticket = ticketList[i]
+          if (ticket.id === ticketId) {
+            //TODO
+            active = true
+            if (ticket.info.selectedIndex < 3) {
+              activeDateStr = ticket.calendar[ticket.info.selectedIndex].date
+            } else {
+              activeDateStr = ticket.moreCalendar.date
+            }
+
+          }
+        }
+      }
+
       // 假装拉取数据
       let url = 'https://www.easy-mock.com/mock/5aa6313619bd8f2d97b03024/calendar/date'
       // let url = 'http://10.112.3.97/github/data/date.json'
@@ -74,8 +102,15 @@
           if (resData.success) {
             this.c_PageShow = true
             this.renderCalendar(resData)
+
+            console.log(active)
+            if (active) {
+              console.log(active)
+              self.selectDateImprovement(Calendar.getDateFromFormattedString(activeDateStr, 'yyyy-MM-dd'))
+            }
           }
         })
+
     },
     methods: {
       renderCalendar: function (resData) {
@@ -146,6 +181,10 @@
       selectDateCalendar: function (options) {
 
         let date = options.date
+        this.selectDateImprovement(date)
+
+      },
+      selectDateImprovement: function (date) {
         let dateOfYearMonth = Calendar.dateFormat(date, 'yyyy-MM')
 
         let yearMonthList = this.yearMonthList
@@ -155,13 +194,13 @@
           let yearMonth = yearMonthList[i]
 
           if (yearMonth.title === dateOfYearMonth) {
-            let selectedHasPrice = true;
+            let selectedHasPrice = true
             this.travelMonth(yearMonth, date, function (day, isSelected) {
-              if(!day.price && isSelected) {
+              if (!day.price && isSelected) {
                 selectedHasPrice = false
               }
             })
-            if(!selectedHasPrice){
+            if (!selectedHasPrice) {
               return
             }
 
@@ -179,14 +218,13 @@
               day.selected = isSelected
             })
 
-          }else{
+          } else {
             this.travelMonth(yearMonth, date, function (day) {
               day.selected = false
             })
           }
 
         }
-
       },
       travelMonth: function (yearMonth, date, cb) {
 

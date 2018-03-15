@@ -63,13 +63,20 @@
         getCodeTxt: '获取验证码',
         toRoute: '/my',
         vcCodeTxt: '',
-        errorCode: [
-          {code: 'member-0100', message: '手机号格式不正确'},
-          {code: 'member-0101', message: '该手机号已绑定过店铺，请更换手机号'},
-          {code: 'member-0102', message: '验证码错误或失效，请重新输入'},
-          {code: 'member-0103', message: '账户异常，绑定失败，请24小时后重新绑定'},
-          {code: 'member-0104', message: '您的发送频率过高，请稍后重试'}
-        ]
+        // errorCode1: [
+        //   {code: 'member-0100', message: '手机号格式不正确'},
+        //   {code: 'member-0101', message: '该手机号已绑定过店铺，请更换手机号'},
+        //   {code: 'member-0102', message: '验证码错误或失效，请重新输入'},
+        //   {code: 'member-0103', message: '账户异常，绑定失败，请24小时后重新绑定'},
+        //   {code: 'member-0104', message: '您的发送频率过高，请稍后重试'}
+        // ],
+        errorCode: {
+          'member-0100': '手机号格式不正确',
+          'member-0101': '该手机号已绑定过店铺，请更换手机号',
+          'member-0102': '验证码错误或失效，请重新输入',
+          'member-0103': '账户异常，绑定失败，请24小时后重新绑定',
+          'member-0104': '您的发送频率过高，请稍后重试'
+        }
       }
     },
     mounted () {
@@ -89,6 +96,9 @@
         console.log('跳转到memberId：' + memberId)
         sessionStorage.setItem('memberId', memberId)
         console.log('跳转到：' + this.toRoute)
+      },
+      getErrorMsg (code) {
+        return this.errorCode[code] ? this.errorCode[code] : '服务器繁忙，请稍后重试!'
       },
       handleAgreeMentClick () {
         this.ruleAgree = !this.ruleAgree
@@ -112,7 +122,6 @@
               } else if (response.data.status === 'FAIL') {
                 if (response.data.code === 'member-0103') {
                   this.showMessage = '账户异常，获取验证码失败，请24小时后重新获取'
-                  this.dlgShow = true
                 } else {
                   this.showMessage = this.getErrorMsg(response.data.code)
                 }

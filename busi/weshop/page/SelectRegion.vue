@@ -67,6 +67,7 @@
 </template>
 
 <script>
+  import * as utils from '../util/utils'
   const countries = [
     {
       letter: 'A',
@@ -229,7 +230,13 @@
         letterTimeObj: null
       }
     },
+    mounted () {
+      this.init()
+    },
     methods: {
+      init: function () {
+        utils.setTitle('选择国家或地区');
+    },
       naver: function (letter) {
         let obj = document.getElementById(letter)
         this.$refs.pagePanel.scrollTop = obj.offsetTop - 44
