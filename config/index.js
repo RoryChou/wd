@@ -64,7 +64,7 @@ module.exports = {
      * Source Maps
      */
 
-    productionSourceMap: process.env.NODE_ENV === 'production',
+    productionSourceMap: process.env.NODE_ENV !== 'production',
     // https://webpack.js.org/configuration/devtool/#production
     devtool: '#source-map',
 

@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
+// import weui from 'weui.js'
 const Home = () => import('@/page/Home')
 const My = () => import('@/page/My')
 const VisitorInfos = () => import('@/page/VisitorInfos')
@@ -19,7 +20,7 @@ const TicketOrder = () => import('@/page/TicketOrder')
 const ShopClose = () => import('@/page/error/ShopClose')
 const ServerError = () => import('@/page/error/ServerError')
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
@@ -105,3 +106,14 @@ export default new Router({
     }
   }
 })
+
+router.beforeEach((to, from, next) => {
+  // 暂时解决weui且换路由不关闭问题，后续全部换成组件
+  let weuiWrap = document.querySelectorAll('.weui-mask')
+  weuiWrap.forEach(item => {
+    item.click()
+  })
+  next()
+})
+
+export default router
