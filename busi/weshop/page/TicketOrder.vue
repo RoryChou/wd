@@ -12,6 +12,7 @@
             :moreCalendar="ticket.moreCalendar"
             :ticketIndex="ticketIndex"
             v-on:moreDateClick="moreDateClick"
+            v-on:selectDateNormal="selectDateNormal"
           />
         </template>
 
@@ -33,63 +34,85 @@
         <div class="fill">
           <div class="infoError">
             <span>姓名</span>
-            <span class="errMsg">生僻字可用拼音代替</span>
-            <input class="searchInput" name="contactName" v-model="ticketInfo.contactName" type="text" placeholder="必填">
-            <i class="inputRemove"></i>
+            <!--<span class="errMsg">生僻字可用拼音代替</span>-->
+            <!--<input class="searchInput" name="contactName" v-model="ticketInfo.contactName" type="text" placeholder="必填">-->
+            <cell-input placeholder="请输入中文姓名" ref="contactName" v-model="ticketInfo.contactName"
+                        :validator="validateChineseName"/>
+            <!--<i class="inputRemove"></i>-->
+
           </div>
           <div>
             <span class="width-auto">姓(拼音)</span>
-            <span class="errMsg">请输入姓(拼音)</span>
-            <input name="contactLastName" v-model="ticketInfo.contactLastName" class="searchInput" type="text"
-                   placeholder="例：李，填Li">
-            <i class="inputRemove"></i>
+            <!--<span class="errMsg">请输入姓(拼音)</span>-->
+            <!--<input name="" v-model="" class="searchInput" type="text"
+                   placeholder="">-->
+            <cell-input placeholder="例：李，填Li" ref="contactLastName" v-model="ticketInfo.contactLastName"
+                        :validator="validateEnName"/>
+            <!--<i class="inputRemove"></i>-->
           </div>
           <div>
             <span class="width-auto">名(拼音)</span>
-            <span class="errMsg">请输入名(拼音)</span>
-            <input name="contactFirstName" v-model="ticketInfo.contactFirstName" class="searchInput" type="text"
-                   placeholder="例：明，填Ming">
-            <i class="inputRemove"></i>
+            <!--<span class="errMsg">请输入名(拼音)</span>-->
+            <!--<input name="contactFirstName" v-model="ticketInfo.contactFirstName" class="searchInput" type="text"
+                   placeholder="例：明，填Ming">-->
+            <cell-input placeholder="例：明，填Ming" ref="contactFirstName" v-model="ticketInfo.contactFirstName"
+                        :validator="validateEnName"/>
+            <!--<i class="inputRemove"></i>-->
           </div>
           <div class="gender">
             <span>人群</span>
             <span class="errMsg">请选择人群</span>
-            <label><i class="selected"></i>成人</label>
-            <label><i></i>儿童</label>
+            <label @click="handleHumanStep(1)">
+              <i v-bind:class="{selected: ticketInfo.contactHumanStep===1}"></i>成人
+            </label>
+            <label @click="handleHumanStep(2)">
+              <i v-bind:class="{selected: ticketInfo.contactHumanStep===2}"></i>儿童
+            </label>
           </div>
           <div>
             <span>手机号</span>
-            <span class="errMsg">请输入正确的手机号</span>
-            <input name="contactMobile" v-model="ticketInfo.contactMobile" type="tel" placeholder="接收取票短信凭证"
-                   maxlength="13">
-            <i class="inputRemove"></i>
+            <!--<span class="errMsg">请输入正确的手机号</span>-->
+            <!--<input name="" v-model="" type="tel" placeholder="接收取票短信凭证"
+                   maxlength="13">-->
+            <cell-input ref="contactMobile" type="number" pattern="[0-9]*" placeholder="请输入手机号码"
+                        v-model="ticketInfo.contactMobile" :validator="validate86Mobile"/>
             <!--<div class="gray able">发送验证码</div>-->
             <!--<div class="reCount">60秒后重发</div>-->
             <!--<div>重发验证码</div>-->
           </div>
           <div>
             <span>邮箱</span>
-            <span class="errMsg">请输入正确的邮箱</span>
-            <input name="contactEmail" v-model="ticketInfo.contactEmail" type="tel" placeholder="用于接收协议等">
-            <i class="inputRemove"></i>
+            <!--<span class="errMsg">请输入正确的邮箱</span>-->
+            <!--<input name="contactEmail" v-model="ticketInfo.contactEmail" type="tel" placeholder="用于接收协议等">-->
+            <cell-input type="email" ref="ticketInfo.contactEmail" placeholder="选填" v-model="ticketInfo.contactEmail"
+                        :validator="validateEmail"/>
+
+            <!--<i class="inputRemove"></i>-->
           </div>
           <div class="gender">
             <span>性别</span>
             <span class="errMsg">请选择性别</span>
-            <label><i class="selected"></i>男</label>
-            <label><i></i>女</label>
+            <label @click="handleChooseGender(1)">
+              <i v-bind:class="{selected: ticketInfo.contactGender===1}"></i>男
+            </label>
+            <label @click="handleChooseGender(2)">
+              <i v-bind:class="{selected: ticketInfo.contactGender===2}"></i>女
+            </label>
           </div>
           <div class="id-card">
-            <span>身份证<i></i></span>
+            <span @click="handleChooseCaType">{{ticketInfo.contactCertificatesType}}<i></i></span>
             <span class="errMsg">请输入正确的证件号</span>
-            <input name="contactIdNo" v-model="ticketInfo.contactIdNo" class="searchInput" type="search"
-                   placeholder="用于景区入园等凭证" maxlength="20">
-            <i class="inputRemove"></i>
+            <!--<input name="" v-model="" class="searchInput" type="search"
+                   placeholder="用于景区入园等凭证" maxlength="20">-->
+
+            <cell-input placeholder='与证件保持一致' ref="ticketInfo.contactCertificatesNumber" v-model="ticketInfo.contactCertificatesNumber"
+                        :validator="ticketInfo.contactCertificatesTypeId==='ID_CARD'?validateIdCard:validateOtherCard"/>
+
           </div>
-          <div>
+          <div @click="handleChooseBirthday">
             <span class="width-auto">出生年月</span>
             <span class="errMsg">请选择出生日期</span>
-            <input onfocus="this.blur()" type="text" placeholder="与证件一致" readonly="readonly">
+            <input onfocus="this.blur()" type="text" placeholder="与证件一致" readonly="readonly" v-model="birthDayTxt">
           </div>
         </div>
       </div>
@@ -105,20 +128,25 @@
         <div class="fill">
           <div class="infoError">
             <span>收件人</span>
-            <span class="errMsg">请输入收件人</span>
-            <input class="searchInput" name="contactName" v-model="mailInfo.contactName" type="text" placeholder="必填">
-            <i class="inputRemove"></i>
+            <!--<span class="errMsg">请输入收件人</span>-->
+            <!--<input class="searchInput" name="contactName" v-model="mailInfo.contactName" type="text" placeholder="必填">-->
+            <cell-input placeholder="请输入中文姓名" ref="contactName" v-model="mailInfo.contactName"
+                        :validator="validateChineseName"/>
+            <!--<i class="inputRemove"></i>-->
           </div>
           <div>
             <span class="width-auto">手机号</span>
             <span class="errMsg">请输入收件人手机号码</span>
-            <input name="contactMobile" v-model="mailInfo.contactMobile" class="searchInput" type="text"
-                   placeholder="必填">
-            <i class="inputRemove"></i>
+            <!--<input name="contactMobile" v-model="mailInfo.contactMobile" class="searchInput" type="text"
+                   placeholder="必填">-->
+            <cell-input ref="contactMobile" type="number" pattern="[0-9]*" placeholder="请输入手机号码"
+                        v-model="mailInfo.contactMobile" :validator="validate86Mobile"/>
+            <!--<i class="inputRemove"></i>-->
           </div>
-          <div class="infoError">
+          <div class="infoError" @click="handleChooseLocation">
             <span class="width-auto">所在地</span>
             <span class="errMsg">请选择所在地</span>
+            <input type="text" readonly v-model="positionTxt">
             <i class="arrow-right"></i>
           </div>
           <div class="addresses">
@@ -146,40 +174,45 @@
       </div>
 
       <!-- 费用明细弹窗 -->
-      <div class="cost-detail ticket-popup" style="display: none">
+      <div class="cost-detail ticket-popup"
+           v-if="payPaneShow">
         <div class="content">
           <h3>费用明细</h3>
           <div class="costListBox">
-            <div class="cost-ticket">
+
+            <div class="cost-ticket" v-for="ticket in ticketList">
               <div class="cost-title">
-                <span>门票</span>
-                <span><i>¥</i>340</span>
+                <span>{{ticket.info.title}}</span>
+                <span><i>¥{{getTicketPrice(ticket) * ticket.info.num}}</i></span>
               </div>
               <div class="cost-list">
-                <p>成人票【扫码入园无需排队】</p>
-                <span><i>¥170/人</i><i>x2</i></span>
+                <p>{{ticket.info.tip}}</p>
+                <span><i>¥{{getTicketPrice(ticket)}}/人</i><i>x{{ticket.info.num}}</i></span>
               </div>
             </div>
+
             <div class="cost-ticket">
               <div class="cost-title">
                 <span>快递</span>
-                <span><i>¥</i>20</span>
+                <span><i>¥</i>{{expressPrice}}</span>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="lvOrder-mask" style="display: none"></div>
+      <div class="lvOrder-mask"
+           @click="switchPayPaneClick()"
+           v-if="payPaneShow"></div>
     </div>
     <div class="ticket-bottom">
-      <div class="pay">
+      <div class="pay" @click="switchPayPaneClick()">
         <div class="inner">
           <i>应付：</i>
           <i>￥</i>
-          <i class="orderPrice">588</i>
+          <i class="orderPrice">{{getAllTicketPrice()}}</i>
           <i class="savedAmount long3">已省￥7</i>
-          <span class="foot-arrow"></span>
+          <span class="foot-arrow" v-bind:class="{opened: payPaneShow}"></span>
           <!--<p>您还未选择游玩日期</p>-->
         </div>
         <!--<p>5555</p>-->
@@ -190,18 +223,147 @@
 </template>
 
 <script>
+  import weui from 'weui.js'
   import LvHeader from '../components/global/LvHeader'
   import TicketOrderItem from '../components/ticket/TicketOrderItem'
+  import CellInput from '../components/visitor-infos/CellInput'
+  import * as utils from '../util/utils'
+
+  const CaTypes = [
+    {
+      label: '身份证',
+      value: 'ID_CARD'
+    },
+    {
+      label: '护照',
+      value: 'HUZHAO'
+    },
+    {
+      label: '台湾通行证',
+      value: 'TAIBAO'
+    },
+    {
+      label: '港澳通行证',
+      value: 'GANGAO'
+    },
+    {
+      label: '台胞证',
+      value: 'TAIBAOZHENG'
+    },
+    {
+      label: '回乡证',
+      value: 'HUIXIANG'
+    },
+    {
+      label: '外国人永久居留身份证',
+      value: 'FOREIGNER_ID_CARD'
+    }
+  ]
+
+  //城市数据
+  const cityData = [
+    {
+      label: '上海',
+      value: 0,
+      children: [
+        {
+          label: '普陀',
+          value: 1,
+          children: [
+            {
+              label: '江桥',
+              value: 1
+            },
+            {
+              label: '郊区',
+              value: 2
+            }
+          ]
+        },
+        {
+          label: '宝山',
+          value: 2,
+          children: [
+            {
+              label: '城区',
+              value: 1
+            },
+            {
+              label: '大场',
+              value: 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      label: '安徽',
+      value: 1,
+      children: [
+        {
+          label: '芜湖',
+          value: 1,
+          disabled: true // 不可用
+        },
+        {
+          label: '合肥',
+          value: 2,
+          children: [
+            {
+              label: '肥东',
+              value: 1
+            },
+            {
+              label: '肥西',
+              value: 2
+            }
+          ]
+        },
+        {
+          label: '黄山',
+          value: 3,
+          children: [
+            {
+              label: '祁门',
+              value: 1
+            },
+            {
+              label: '歙县',
+              value: 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      label: '香港',
+      value: 3,
+      children: [
+        {
+          label: '九龙',
+          value: 1
+        },
+        {
+          label: '尖沙咀',
+          value: 2
+        }
+      ]
+    }
+  ]
 
   export default {
     name: 'ticket-order',
     components: {
       LvHeader,
-      TicketOrderItem
+      TicketOrderItem,
+      CellInput
     },
     data () {
       return {
         c_PageShow: false,
+
+        //快递价格
+        expressPrice: 20,
 
         //门票信息
         ticketList: [
@@ -213,29 +375,25 @@
 
               num: 1,
               maxNum: 5,
-              selectedIndex: 3,
+              selectedIndex: 3
             },
 
             calendar: [{
               date: '2018-04-06',
-              shortDate: '04-06',
               price: 90,
-              isable: false,
+              isable: false
             }, {
               date: '2018-04-07',
-              shortDate: '04-07',
               price: 100,
-              isable: true,
+              isable: true
             }, {
               date: '2018-04-08',
-              shortDate: '04-08',
               price: 110,
-              isable: true,
+              isable: true
             }],
             moreCalendar: {
               date: '2018-04-10',
-              shortDate: '04-10',
-              price: 90,
+              price: 90
             }
           },
           {
@@ -246,25 +404,22 @@
 
               num: 1,
               maxNum: 5,
-              selectedIndex: 0,
+              selectedIndex: 0
             },
 
             calendar: [{
               date: '2018-04-07',
-              shortDate: '04-07',
               price: 100,
-              isable: true,
+              isable: true
             }, {
               date: '2018-04-08',
-              shortDate: '04-08',
               price: 90,
-              isable: true,
+              isable: true
             }, {
               date: '2018-04-09',
-              shortDate: '04-09',
               price: 80,
-              isable: false,
-            }],
+              isable: false
+            }]
           }
         ],
 
@@ -280,7 +435,7 @@
           contactFirstName: '三',
 
           //人群
-          //TODO
+          contactHumanStep: 1,
 
           //手机号
           contactMobile: '136',
@@ -288,14 +443,18 @@
           //邮箱
           contactEmail: 'qq',
 
-          //性别
-          //TODO
+          // 性别 1:男 2:女
+          contactGender: 2,
 
-          //身份证
-          contactIdNo: '341',
+          //证件类型
+          contactCertificatesType: '身份证',
+          contactCertificatesTypeId: 'ID_CARD',
+
+          //证件号码
+          contactCertificatesNumber: '341',
 
           //出生年月
-          //TODO
+          contactBirthday: null
         },
 
         //邮寄地址信息
@@ -308,15 +467,41 @@
 
           //所在地
           //TODO
+          contactPosition: [0, 0, 0],
 
           //详细地址
           addresses: '真北路',
 
           //邮政编码
-          contactZip: '200000',
+          contactZip: '200000'
 
           //快递
         },
+
+        payPaneShow: false
+      }
+    },
+    computed: {
+      birthDayTxt: function () {
+        return this.ticketInfo.contactBirthday ? this.ticketInfo.contactBirthday : ''
+      },
+      positionTxt: function () {
+
+        let position = this.mailInfo.contactPosition
+
+        let arr = []
+        let temp = cityData
+        for (let i = 0; i < position.length; i++) {
+          let item = position[i]
+          let value = this.getCityDataFromIdInList(item, temp)
+          if (!value) {
+            break
+          }
+          arr.push(value.label)
+          temp = value.children
+        }
+
+        return arr.join('-')
       }
     },
     mounted () {
@@ -324,8 +509,6 @@
       setTimeout(() => {
         this.c_PageShow = true
         // console.log(this.$route.query.id)
-
-        // console.log(JSON.parse(sessionStorage.getItem('orderinfo')))
 
         let orderinfoStr = sessionStorage.getItem('orderinfo')
         if (orderinfoStr) {
@@ -355,6 +538,17 @@
       }, 200)
     },
     methods: {
+      getCityDataFromIdInList: function (idStr, data) {
+        for (let i = 0; i < data.length; i++) {
+          let item = data[i]
+          if (!item) {
+            return null
+          }
+          if (idStr === item.value) {
+            return item
+          }
+        }
+      },
       moreDateClick: function (options) {
         let ticketId = options.id
 
@@ -371,6 +565,176 @@
           // TODO 以下依次类推
         }))
 
+      },
+      selectDateNormal: function (options) {
+        let ticketList = this.ticketList
+        for (let i = 0; i < ticketList.length; i++) {
+          let ticket = ticketList[i]
+          if (ticket.id === options.id) {
+            ticket.info.selectedIndex = options.index
+          }
+        }
+      },
+      switchPayPaneClick: function () {
+        this.payPaneShow = !this.payPaneShow
+      },
+      getTicketPrice: function (ticket) {
+        let selectedIndex = ticket.info.selectedIndex
+        if (selectedIndex === 3) {
+          return ticket.moreCalendar.price
+        } else {
+          return ticket.calendar[selectedIndex].price
+        }
+      },
+      getAllTicketPrice: function () {
+        let ticketList = this.ticketList
+        let count = this.expressPrice
+        for (let i = 0; i < ticketList.length; i++) {
+          let ticket = ticketList[i]
+          count += this.getTicketPrice(ticket) * ticket.info.num
+        }
+        return count
+      },
+      // 点击选择性别事件
+      handleChooseGender: function (i) {
+        this.ticketInfo.contactGender = i
+      },
+      // 点击选择人群事件
+      handleHumanStep: function (i) {
+        this.ticketInfo.contactHumanStep = i
+      },
+      // 点击选择出生日期事件
+      handleChooseBirthday: function () {
+        weui.datePicker({
+          start: 1920,
+          end: 2020,
+          defaultValue: [1980, 9, 18],
+          onConfirm: (result) => {
+            this.ticketInfo.contactBirthday = result[0].value + '-' + (result[1].value < 10 ? ('0' + result[1].value) : result[1].value) + '-' + (result[2].value < 10 ? ('0' + result[2].value) : result[2].value)
+          }
+        })
+      },
+      // 点击修改证件类型事件
+      handleChooseCaType: function (i, value) {
+        let selectedValues = []
+        selectedValues.push(this.ticketInfo.contactCertificatesType)
+        let unSelectedCas = []
+        CaTypes.forEach(item => {
+          if (selectedValues.indexOf(item.label) < 0 || item.label === value) {
+            unSelectedCas.push(item)
+          }
+        })
+        weui.picker(unSelectedCas, {
+          container: 'body',
+          defaultValue: [0],
+          onConfirm: (result) => {
+            this.ticketInfo.contactCertificatesTypeId = result[0].value
+            this.ticketInfo.contactCertificatesType = result[0].label
+            // this.ticketInfo.contactCertificatesNumber = ''
+          }
+        })
+      },
+      //点击选择所在地
+      handleChooseLocation: function () {
+        let self = this
+        // 级联picker
+        weui.picker(cityData, {
+          defaultValue: self.mailInfo.contactPosition,
+          onChange: function (result) {
+          },
+          onConfirm: function (result) {
+
+            let ret = []
+            for (let i = 0; i < result.length; i++) {
+              let item = result[i]
+              if (!item) {
+                break
+              }
+              ret.push(item.value)
+            }
+            self.mailInfo.contactPosition = ret
+          }
+        })
+      },
+      validateChineseName: function (value) {
+        if (value === '') {
+          return {errmsg: '请输入姓名'}
+        }
+        if (/[^\u4e00-\u9fa5a-zA-Z]/.test(value)) {
+          return {errmsg: '姓名格式有误，请重新输入'}
+        } else {
+          return null
+        }
+      },
+      validateEnName: function (value) {
+        if (value === '') {
+          return null
+        }
+        if (/[^a-zA-Z\s]/.test(value)) {
+          return {errmsg: '英文格式有误，请重新输入'}
+        } else {
+          return null
+        }
+      },
+      validateIdCard: function (value) {
+        if (value === '') {
+          return null
+        }
+        if (utils.isValidID(value)) {
+          return null
+        } else {
+          return {errmsg: '身份证格式有误，请重新输入'}
+        }
+      },
+      validateOtherCard: function (value) {
+        if (value === '') {
+          return null
+        }
+        if (/[^a-zA-Z\d]/.test(value)) {
+          return {errmsg: '证件格式有误，请重新输入'}
+        } else {
+          return null
+        }
+      },
+      validateEmail: function (value) {
+        if (value === '') {
+          return null
+        }
+        if (utils.isValidEmail(value)) {
+          return null
+        } else {
+          return {
+            errmsg: '邮箱格式有误，请重新输入'
+          }
+        }
+      },
+      validate86Mobile: function (value) {
+        if (value === '') {
+          return {
+            errmsg: '请输入联系电话'
+          }
+        }
+        if (utils.isValidMobile(value)) {
+          return null
+        } else {
+          return {
+            errmsg: '联系电话格式有误，请重新输入'
+          }
+        }
+      },
+      validateMobile: function (value) {
+        if (value === '') {
+          return {
+            errmsg: '请输入联系电话'
+          }
+        }
+        if (/\d+/.test(value)) {
+          return null
+        } else {
+          return {
+            errmsg: '联系电话格式有误，请重新输入'
+          }
+        }
       }
     }
   }

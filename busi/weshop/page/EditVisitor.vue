@@ -441,7 +441,7 @@
             self.humanStep = visitor.visitorType
             self.surName = visitor.lastName
             self.givenNames = visitor.firstName
-            self.gender = visitor.sex
+            self.gender = parseInt(visitor.sex)
             self.birthday = visitor.birthday
             self.mobileNum = visitor.mobileNum
             self.regionNum = visitor.regionNum
@@ -507,6 +507,7 @@
         weui.picker(unSelectedCas, {
           container: 'body',
           defaultValue: [0],
+          className: 'weui-wrap',
           onConfirm: (result) => {
             this.certificates.push({
               type: result[0].label,
@@ -540,6 +541,8 @@
       },
       // 点击保存事件
       handleSave: function () {
+        this.surName = this.surName.replace(/(^\s*)|(\s*$)/g, '')
+        this.givenNames = this.givenNames.replace(/(^\s*)|(\s*$)/g, '')
         let allValidate = true;
         ['zhName', 'surName', 'givenNames', 'mobileNum', 'visitorEmail'].forEach(item => {
           !this.$refs[item].validate() && (allValidate = false)
@@ -845,7 +848,7 @@
         if (value === '') {
           return null
         }
-        if (/[^a-zA-Z]/.test(value)) {
+        if (/[^a-zA-Z\s]/.test(value)) {
           return {errmsg: '英文格式有误，请重新输入'}
         } else {
           return null

@@ -6,7 +6,7 @@
         <span
           v-for="col in row"
           v-bind:class="{weekend: col.isWeekend, usable: col.price, selected: col.selected}"
-          v-on:click="selectDate($event, col.date)">
+          v-on:click="selectDate($event, col.date, col.price)">
           <template v-if="col.isThisMonth">
           {{col.date.getDate()}}
           <i class="price">
@@ -29,9 +29,13 @@
       'month'
     ],
     methods: {
-      selectDate: function (e, date) {
+      selectDate: function (e, date, price) {
+        if (!price) {
+          return
+        }
         this.$emit('selectDateCalendar', {
-          date: date
+          date: date,
+          price: price
         })
       }
     }

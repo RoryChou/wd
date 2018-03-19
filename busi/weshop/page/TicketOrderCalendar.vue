@@ -60,7 +60,8 @@
     data () {
       return {
         c_PageShow: false,
-        yearMonthList: []
+        yearMonthList: [],
+        orderinfo: null
       }
     },
     mounted () {
@@ -73,7 +74,6 @@
       let orderinfoStr = sessionStorage.getItem('orderinfo')
       if (orderinfoStr) {
         let orderinfo = JSON.parse(orderinfoStr)
-        console.log(orderinfo)
 
         let ticketId = orderinfo.ticketActive.id
 
@@ -91,11 +91,14 @@
 
           }
         }
+
+        this.orderinfo = orderinfo
+
       }
 
       // 假装拉取数据
-      let url = 'https://www.easy-mock.com/mock/5aa6313619bd8f2d97b03024/calendar/date'
-      // let url = 'http://10.112.3.97/github/data/date.json'
+      // let url = 'https://www.easy-mock.com/mock/5aa6313619bd8f2d97b03024/calendar/date'
+      let url = 'http://10.112.3.97/github/data/date.json'
       axios.get(url)
         .then(res => {
           let resData = res.data
@@ -103,9 +106,7 @@
             this.c_PageShow = true
             this.renderCalendar(resData)
 
-            console.log(active)
             if (active) {
-              console.log(active)
               self.selectDateImprovement(Calendar.getDateFromFormattedString(activeDateStr, 'yyyy-MM-dd'))
             }
           }
@@ -180,8 +181,58 @@
       },
       selectDateCalendar: function (options) {
 
+        if (!this.orderinfo) {
+          return
+        }
         let date = options.date
+        let price = options.price
         this.selectDateImprovement(date)
+
+        this.setSessionOfTicket(date, price)
+
+        this.$router.back()
+      },
+      setSessionOfTicket: function (date, price) {
+        let dateStr = Calendar.dateFormat(date, 'yyyy-MM-dd')
+        let orderinfo = this.orderinfo
+
+        let ticketActive = this.orderinfo.ticketActive
+        let ticketActiveId = ticketActive.id
+
+        let ticketList = this.orderinfo.ticketList
+        for (let i = 0; i < ticketList.length; i++) {
+          let ticket = ticketList[i]
+
+          if (ticket.id === ticketActiveId) {
+
+            let hasOne = false
+            let calendar = ticket.calendar
+            for (let j = 0; j < calendar.length; j++) {
+              let item = calendar[j]
+
+              if (dateStr === item.date) {
+                hasOne = true
+                ticket.info.selectedIndex = j
+
+                ticket.moreCalendar = null
+              }
+
+            }
+
+            if (!hasOne) {
+
+              ticket.moreCalendar = {
+                date: dateStr,
+                price: price
+              }
+
+              ticket.info.selectedIndex = 3
+
+            }
+            sessionStorage.setItem('orderinfo', JSON.stringify(this.orderinfo))
+
+          }
+        }
 
       },
       selectDateImprovement: function (date) {

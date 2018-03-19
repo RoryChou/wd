@@ -76,7 +76,8 @@
           'member-0102': '验证码错误或失效，请重新输入',
           'member-0103': '账户异常，绑定失败，请24小时后重新绑定',
           'member-0104': '您的发送频率过高，请稍后重试'
-        }
+        },
+        c_sendTimeStemp: 0
       }
     },
     mounted () {
@@ -110,6 +111,7 @@
         this.mobileTouch = true
         if (!this.mobileErrShow) {
           this.secs = 60
+          this.c_sendTimeStemp = Math.round((new Date().getTime()) / 1000)
           this.rollTime()
           // 发验证码
           axios.post(cm.bindMobile.sendMobileAuthCode, {
@@ -181,6 +183,10 @@
       },
       rollTime () {
         const that = this
+        let nowTimeStemp = Math.round((new Date().getTime()) / 1000)
+        if ((nowTimeStemp - this.c_sendTimeStemp - (60 - this.secs)) > 2) {
+          this.secs = this.c_sendTimeStemp - nowTimeStemp + 60
+        }
         that.secs--
         if (that.secs <= 0) {
           that.secs = 0

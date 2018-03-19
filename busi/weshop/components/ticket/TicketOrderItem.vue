@@ -21,7 +21,8 @@
         <template v-for="(item, index) in calendar">
           <span
             v-bind:class="{selected: info.selectedIndex===index, isable: item.isable}"
-          >今日{{item.shortDate}}<br>
+            @click="selectDateClick(index,item.isable, id)"
+          >今日{{dateStrToShortDateStr(item.date)}}<br>
             <i>￥{{item.price}}</i>
             <i class="select-icon"></i>
           </span>
@@ -29,7 +30,7 @@
 
         <span v-if="moreCalendar" @click="moreDateClickItem(ticketIndex, id)"
               v-bind:class="{selected: info.selectedIndex===3, isable: true}"
-        >今日{{moreCalendar.shortDate}}<br>
+        >今日{{dateStrToShortDateStr(moreCalendar.date)}}<br>
             <i>￥{{moreCalendar.price}}</i>
             <i class="select-icon"></i>
         </span>
@@ -40,18 +41,29 @@
     </div>
     <div class="number">
       <p>购买数量<i>每单最多预订{{info.maxNum}}张</i></p>
-      <p>
+      <!--<p>
         <i class="dec-count gray"></i>
         <input type="tel" value="" v-model="info.num">
         <i class="add-count"></i>
-      </p>
+      </p>-->
+      <NumberBox
+        v-bind:max="info.maxNum"
+        v-model="info.num"
+      />
+
     </div>
   </div>
 </template>
 
 <script>
+  import Calendar from '../../util/calendar'
+  import NumberBox from '../../components/ticket/NumberBox'
+
   export default {
     name: 'ticket-order-item',
+    components: {
+      NumberBox
+    },
     props: [
       'id',
       'info',
@@ -60,11 +72,23 @@
       'ticketIndex'
     ],
     methods: {
+      dateStrToShortDateStr: function (dateStr) {
+        let date = Calendar.getDateFromFormattedString(dateStr, 'yyyy-MM-dd')
+        return Calendar.dateFormat(date, 'MM-dd')
+      },
       moreDateClickItem: function (index, id) {
         this.$emit('moreDateClick', {
           index: index,
           id: id
         })
+      },
+      selectDateClick: function (index, isable, id) {
+        if (isable) {
+          this.$emit('selectDateNormal', {
+            index: index,
+            id: id
+          })
+        }
       }
     }
   }
@@ -175,46 +199,6 @@
             padding-left: 10px;
             vertical-align: top;
           }
-        }
-        &:last-child {
-          float: right;
-          margin: 14px 0;
-          font-size: 0;
-          i {
-            display: inline-block;
-            width: 41px;
-            height: 36px;
-          }
-          input {
-            width: 50px;
-            font-size: 16px;
-            text-align: center;
-            height: 35px;
-            line-height: 35px;
-            vertical-align: top;
-            color: #333;
-            border-image: url(data:image/gif;base64,R0lGODlhBQAFAPABANra2v///yH5BAUHAAEALAAAAAAFAAUAAAIHhB9pGatnCgA7) 2 stretch;
-            border-width: 1px;
-            box-sizing: border-box;
-            outline: none;
-            border-style: solid;
-          }
-        }
-      }
-      .dec-count {
-        background: url(../../images/dec_able.png) no-repeat;
-        background-size: 100%;
-        &.gray {
-          background: url(../../images/dec_unable.png) no-repeat;
-          background-size: 100%;
-        }
-      }
-      .add-count {
-        background: url(../../images/add_able.png) no-repeat;
-        background-size: 100%;
-        &.gray {
-          background: url(../../images/add_unable.png) no-repeat;
-          background-size: 100%;
         }
       }
     }
