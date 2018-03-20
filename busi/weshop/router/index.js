@@ -16,6 +16,7 @@ const MyOrders = () => import('@/page/MyOrders')
 const TicketDetail = () => import('@/page/TicketDetail')
 const TicketIntroduction = () => import('@/page/TicketIntroduction')
 const TicketOrderCalendar = () => import('@/page/TicketOrderCalendar')
+const Pay = () => import('@/page/Pay')
 const TicketOrder = () => import('@/page/TicketOrder')
 const ShopClose = () => import('@/page/error/ShopClose')
 const ServerError = () => import('@/page/error/ServerError')
@@ -96,6 +97,11 @@ const router = new Router({
       path: '/ticket/ordercalendar',
       name: 'ticketordercalendar',
       component: TicketOrderCalendar
+    },
+    {
+      path: '/pay',
+      name: 'pay',
+      component: Pay
     }
   ],
   scrollBehavior (to, from, savedPosition) {

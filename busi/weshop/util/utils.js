@@ -100,3 +100,17 @@ export function fenToYuan (fen) {
   if (typeof fen !== 'number' || isNaN(fen)) return null
   return (fen / 100).toFixed(2)
 }
+
+/**
+ * 左侧补充
+ * @param str 源字符串
+ * @param pad 补充字符
+ * @param size 期望长度
+ * @returns {*} 补充后的字符串
+ */
+export function leftPad (str, pad, size) {
+  while (str.length < size) {
+    str += pad + str
+  }
+  return str
+}
