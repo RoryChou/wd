@@ -53,9 +53,9 @@ module.exports = {
     // common res
     commonResource: {
       js: [
-        '//pics.lvjs.com.cn/mobile/lib/vue/vue-router.2.7.0.min.js',
-        '//pics.lvjs.com.cn/mobile/lib/vue/vue-2.4.1.min.js',
-        '//pics.lvjs.com.cn/mobile/lib/vue/axios-0.16.2.min.js'
+        // '//pics.lvjs.com.cn/mobile/lib/vue/vue-router.2.7.0.min.js',
+        // '//pics.lvjs.com.cn/mobile/lib/vue/vue-2.4.1.min.js',
+        '//pics.lvjs.com.cn/fed/lib/vues/1.0.0/vues.js'
       ],
       css: []
     },

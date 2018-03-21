@@ -3,6 +3,6 @@ const devEnv = require('./dev.env')
 
 module.exports = merge(devEnv, {
   NODE_ENV: '"testing"',
-  API_BASE: '""',
+  API_BASE: '"/weshopclient"',
   API_SIGNAL: '""'
 })
