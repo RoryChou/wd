@@ -71,17 +71,17 @@
     methods: {
       // 初始化方法
       init: function () {
-        let isLogin = sessionStorage.getItem('isLogin')
-        if (isLogin === 'true') {
-          // do nothing
-        } else {
-          axios.get(cm.myHome.saveFromRoute, {
-            params: {
-              fromRoute: '/visitorinfos'
-            }
-          })
-          this.$router.replace('/wxlogin')
-        }
+        // let isLogin = sessionStorage.getItem('isLogin')
+        // if (isLogin === 'true') {
+        //   // do nothing
+        // } else {
+        //   axios.get(cm.myHome.saveFromRoute, {
+        //     params: {
+        //       fromRoute: '/visitorinfos'
+        //     }
+        //   })
+        //   this.$router.replace('/wxlogin')
+        // }
         utils.setTitle('常用游玩人信息')
 
         axios.get(cm.myHome.loadVisitor, {

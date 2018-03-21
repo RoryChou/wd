@@ -43,7 +43,6 @@
                                     </div>
                                     <span class="weui-cell__ft"></span>
                                 </router-link>
-
                             </div>
                         </div>
                     </div>
@@ -66,8 +65,7 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import cm from '../cm'
+  import { getUserInfo } from '@/api/user'
   import * as utils from '../util/utils'
 
   export default {
@@ -90,50 +88,54 @@
       }
     },
     mounted () {
-      setTimeout(() => {
-        this.c_PageShow = true
-      }, 10)
-      // 假装拉取数据
-      this.init()
+      // setTimeout(() => {
+      //   this.c_PageShow = true
+      // }, 10)
+      // // 假装拉取数据
+      // this.init()
+      this.loadMember()
     },
     methods: {
-      //初始化方法
+      // 初始化方法
       init: function () {
         utils.setTitle('会员中心')
-        //查询绑定列表需要的数据
+        // 查询绑定列表需要的数据
         this.loadMember()
-
       },
-      //加载session数据
+      // 加载session数据
       loadMember: function () {
-        //this代表该vue对象
-        var self = this
+        // this代表该vue对象
+        let self = this
         const u = navigator.userAgent
-        const isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) //ios终端
-        var mobileType = isiOS ? 'iphone' : 'android'
-        var storeId = sessionStorage.getItem('storeId')
+        const isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) // ios终端
+        let mobileType = isiOS ? 'iphone' : 'android'
+        let storeId = sessionStorage.getItem('storeId')
         self.contactMobile = sessionStorage.getItem('contactMobile')
-        console.log('店铺id--storeId:' + storeId)
-        //加载storeId和mobileType
-        console.log('手机类型mobileType:' + mobileType)
-        axios.get(cm.myHome.loadMember, {
-          params: {
-            storeId: storeId,
-            mobileType: mobileType
-          }
-        }).then(function (response) {
-          if (response.data.success) {
-            //绑定数据
-            self.member = response.data.infos[0]
-            sessionStorage.setItem('memberId', self.member.memberId)
-
-            self.isLogin = true
+        getUserInfo({
+          storeId: storeId,
+          mobileType: mobileType
+        }).then(res => {
+          if (res.data.success) {
+            this.member = res.data.infos[0]
+            localStorage.setItem('user', JSON.stringify(this.member))
+            let cbUrl = sessionStorage.getItem('cburl')
+            if (cbUrl) {
+              sessionStorage.removeItem('cburl')
+              this.$router.push(cbUrl)
+            }
+            this.isLogin = true
           } else {
-            self.isLogin = false
+            localStorage.removeItem('user')
+            this.member = {
+              memberId: '',
+              openId: '',
+              storeId: '',
+              nickName: '',
+              headImgUrl: ''
+            }
+            this.isLogin = false
           }
-          sessionStorage.setItem('isLogin', self.isLogin)
-
-        }).catch(function (error) {
+          this.c_PageShow = true
         })
       },
       handleDlgOK () {

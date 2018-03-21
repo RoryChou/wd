@@ -77,9 +77,7 @@
 
 <style lang="less" scoped>
     .weui-cell__bd {
-        position: absolute;
-        left: 84px;
-        top: 0px;
+        position: relative;
         input {
             top: 0;
         }

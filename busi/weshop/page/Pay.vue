@@ -1,37 +1,76 @@
 <template>
-  <section class="page" :class="{show:c_PageShow}">
+  <section class="page" :class="{show:c_PageShow}" :style="{minHeight:clientHeight+'px'}">
     <lv-header title="订单支付"/>
 
-    <div class="header">
-      <i class="weui-icon-success weui-icon_msg"></i>
-      <div class="info">
-        <h5>订单已提交等待支付！</h5>
-        <p>订单总额：<em>￥300</em></p>
-      </div>
-    </div>
-    <div class="main">
-      <a class="weui-btn weui-btn_primary" v-bind:class="{'weui-btn_disabled': remainderPaymentTime===0}">微信支付</a>
-      <div class="time">
-        剩余支付时间：
-        <em>
-          {{time}}
-        </em>
-      </div>
-    </div>
+    <section class="pre-pay" v-if="!hasPay">
+      <div class="header">
+        <i class="weui-icon-success weui-icon_msg"></i>
+        <div class="info">
+          <h5>订单已提交等待支付！</h5>
+          <div>
+            <p>请尽快支付订单，预期将自动取消</p>
+            <p>剩余支付时间： {{time}}</p>
+          </div>
 
-    <div class="header">
-      <i class="weui-icon-success weui-icon_msg"></i>
-      <div class="info">
-        <h5>订单已提交等待支付！</h5>
-        <p class="tip">关注公众号可查看订单信息</p>
+        </div>
       </div>
-    </div>
-    <div class="main">
-      <div class="qr-code">
-        <img src="https://placehold.it/170x170" alt="">
+
+      <div class="lists">
+
+        <div class="list">
+          <h5>上海野生动物园</h5>
+          <div class="items">
+
+            <div class="item">
+              <div class="left">
+                <p>普通成人马戏套票 下午场（含景区大门票+猛兽区大巴游览）</p>
+                <p><i>游玩日期：</i>2018-5-1</p>
+              </div>
+              <div class="right">
+                <em>￥240</em> x1
+              </div>
+            </div>
+            <div class="item">
+              <div class="left">
+                <p>普通成人马戏套票 下午场（含景区大门票+猛兽区大巴游览）</p>
+                <p><i>游玩日期：</i>2018-5-1</p>
+              </div>
+              <div class="right">
+                <em>￥240</em> x1
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="count">
+          应付总额：<em>￥400</em>
+        </div>
+
       </div>
-      <p>长按进入公众号</p>
-    </div>
+
+      <div class="main">
+        <a class="weui-btn weui-btn_primary" @click="payItNow"
+           v-bind:class="{'weui-btn_disabled': remainderPaymentTime===0}">微信支付</a>
+
+      </div>
+    </section>
+
+    <section class="has-pay" v-if="hasPay">
+      <div class="header">
+        <i class="weui-icon-success weui-icon_msg"></i>
+        <div class="info">
+          <h5>恭喜,订单支付成功！</h5>
+          <p class="tip">关注公众号可查看订单信息</p>
+        </div>
+      </div>
+      <div class="main">
+        <div class="qr-code">
+          <img src="https://placehold.it/170x170" alt="">
+        </div>
+        <p>长按进入公众号</p>
+      </div>
+    </section>
 
   </section>
 </template>
@@ -47,7 +86,9 @@
     },
     data () {
       return {
+        hasPay: false,
         c_PageShow: false,
+        clientHeight: document.documentElement.clientHeight,
         yearMonthList: [],
         orderinfo: null,
         // remainderPaymentTime: 1800
@@ -81,7 +122,7 @@
 
         return utils.leftPad(h, '0', 2) + 'h' +
           utils.leftPad(m, '0', 2) + '\'' +
-          utils.leftPad(s, '0', 2) + '\"'
+          utils.leftPad(s, '0', 2) + '\'\''
       }
     },
     mounted () {
@@ -93,6 +134,18 @@
           clearInterval(timer)
         }
       }, 1000)
+    },
+    methods: {
+      payItNow: function () {
+
+        if (this.remainderPaymentTime > 0) {
+          this.toHas()
+        }
+
+      },
+      toHas: function () {
+        this.hasPay = true
+      }
     }
   }
 </script>
@@ -100,7 +153,7 @@
 <style lang="less" scoped>
   @import "../style/base";
 
-  body {
+  .page {
     background-color: #f6f6f6;
   }
 
@@ -115,15 +168,19 @@
     .weui-icon-success {
       font-size: 55px;
       margin-right: 10px;
+      display: flex;
+      align-items: center;
     }
     .info {
       display: flex;
       flex-direction: column;
       justify-content: center;
-      line-height: 25px;
+
       h5 {
+        margin-bottom: 10px;
         flex-grow: 1;
         font-size: 16px;
+        line-height: 25px;
       }
       p {
         flex-grow: 1;
@@ -143,7 +200,7 @@
     margin: 0 auto;
     width: 90%;
     font-size: 12px;
-    padding: 50px 0;
+    padding: 20px 0;
     .time {
       padding-top: 50px;
       text-align: center;
@@ -155,7 +212,7 @@
       height: 170px;
       display: flex;
       justify-content: center;
-
+      padding-top: 20px;
       align-items: center;
       img {
         width: 170px;
@@ -168,4 +225,55 @@
       margin-top: 20px;
     }
   }
+
+  .lists {
+    padding-top: 20px;
+  }
+
+  .list {
+    font-size: 12px;
+    width: 90%;
+    margin: 0 auto;
+    h5 {
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 30px;
+      border-bottom: 1px solid #ccc;
+    }
+    .item {
+      font-size: 14px;
+      display: flex;
+      padding: 10px 0 5px 0;
+      line-height: 20px;
+      .left {
+        width: 80%;
+        i {
+          color: #999;
+        }
+        p {
+          margin-bottom: 5px;
+        }
+      }
+      .right {
+        width: 20%;
+        text-align: right;
+        em {
+          font-style: normal;
+          color: #f60;
+        }
+      }
+    }
+  }
+
+  .count {
+    padding-top: 10px;
+    width: 90%;
+    margin: 0 auto;
+    font-size: 14px;
+    em {
+      color: #f90;
+      font-style: normal;
+    }
+  }
+
 </style>

@@ -12,138 +12,138 @@
         <div class="page-panel" :class="{noscroll:noscroll}" :style="{minHeight:clientHeight+'px'}">
             <!--有订单情况-->
             <div class="order-list">
-            <!--景点门票订单-->
-            <div class="order-item">
-            <div class="order-hd wd-bd-bottom">
-            <i class="menpiao"></i>
-            <h3>景点门票</h3>
-            <label>待支付</label>
-            </div>
-            <div class="order-bd">
-            <div class="order-title">
-            <div class="name">上海龙之梦大酒店</div>
-            <div class="price"><i>¥</i>788</div>
-            </div>
-            <p>房间类型：标准房 1间</p>
-            <p>入住日期：2017-10-28 住1晚</p>
-            <div class="btns">
-            <a class="weui-btn weui-btn_default" @click="handleCancelOrder">取消订单</a>
-            <a class="weui-btn weui-btn_primary">立即支付</a>
-            </div>
-            </div>
-            </div>
-            <!--酒店订单-->
-            <div class="order-item">
-            <div class="order-hd wd-bd-bottom">
-            <i class="jiudian"></i>
-            <h3>酒店</h3>
-            <label>待支付</label>
-            </div>
-            <div class="order-bd">
-            <div class="order-title">
-            <div class="name">上海龙之梦大酒店</div>
-            <div class="price"><i>¥</i>788</div>
-            </div>
-            <p>房间类型：标准房 1间</p>
-            <p>入住日期：2017-10-28 住1晚</p>
-            </div>
-            </div>
-            <!--自由行订单-->
-            <div class="order-item">
-            <div class="order-hd wd-bd-bottom">
-            <i class="ziyouxing"></i>
-            <h3>自由行</h3>
-            <label>待支付</label>
-            </div>
-            <div class="order-bd">
-            <div class="order-title">
-            <div class="name">上海龙之梦大酒店</div>
-            <div class="price"><i>¥</i>788</div>
-            </div>
-            <p>房间类型：标准房 1间</p>
-            <p>入住日期：2017-10-28 住1晚</p>
-            </div>
-            </div>
-            <!--邮轮订单-->
-            <div class="order-item">
-            <div class="order-hd wd-bd-bottom">
-            <i class="youlun"></i>
-            <h3>邮轮</h3>
-            <label>待支付</label>
-            </div>
-            <div class="order-bd">
-            <div class="order-title">
-            <div class="name">上海龙之梦大酒店</div>
-            <div class="price"><i>¥</i>788</div>
-            </div>
-            <p>房间类型：标准房 1间</p>
-            <p>入住日期：2017-10-28 住1晚</p>
-            </div>
-            </div>
-            <!--签证订单-->
-            <div class="order-item">
-            <div class="order-hd wd-bd-bottom">
-            <i class="qianzheng"></i>
-            <h3>签证</h3>
-            <label>待支付</label>
-            </div>
-            <div class="order-bd">
-            <div class="order-title">
-            <div class="name">上海龙之梦大酒店</div>
-            <div class="price"><i>¥</i>788</div>
-            </div>
-            <p>房间类型：标准房 1间</p>
-            <p>入住日期：2017-10-28 住1晚</p>
-            </div>
-            </div>
-            <!--跟团游订单-->
-            <div class="order-item">
-            <div class="order-hd wd-bd-bottom">
-            <i class="gengtuanyou"></i>
-            <h3>跟团游</h3>
-            <label>待支付</label>
-            </div>
-            <div class="order-bd">
-            <div class="order-title">
-            <div class="name">上海龙之梦大酒店</div>
-            <div class="price"><i>¥</i>788</div>
-            </div>
-            <p>房间类型：标准房 1间</p>
-            <p>入住日期：2017-10-28 住1晚</p>
-            </div>
-            </div>
-            <!--当地游订单-->
-            <div class="order-item">
-            <div class="order-hd wd-bd-bottom">
-            <i class="dangdiyou"></i>
-            <h3>当地游</h3>
-            <label>待支付</label>
-            </div>
-            <div class="order-bd">
-            <div class="order-title">
-            <div class="name">上海龙之梦大酒店</div>
-            <div class="price"><i>¥</i>788</div>
-            </div>
-            <p>房间类型：标准房 1间</p>
-            <p>入住日期：2017-10-28 住1晚</p>
-            </div>
-            </div>
-            <!--酒店套餐订单-->
-            <div class="order-item">
-            <div class="order-hd wd-bd-bottom">
-            <i class="jiudiantaocan"></i>
-            <h3>酒店套餐</h3>
-            <label>待支付</label>
-            </div>
-            <div class="order-bd">
-            <div class="order-title">
-            <div class="name">上海龙之梦大酒店</div>
-            <div class="price"><i>¥</i>788</div>
-            </div>
-            <p>房间类型：标准房 1间</p>
-            <p>入住日期：2017-10-28 住1晚</p>
-            </div>
-            </div>
+                <!--景点门票订单-->
+                <div class="order-item">
+                    <div class="order-hd wd-bd-bottom">
+                        <i class="menpiao"></i>
+                        <h3>景点门票</h3>
+                        <label>待支付</label>
+                    </div>
+                    <div class="order-bd">
+                        <div class="order-title">
+                            <div class="name">上海龙之梦大酒店</div>
+                            <div class="price"><i>¥</i>788</div>
+                        </div>
+                        <p>房间类型：标准房 1间</p>
+                        <p>入住日期：2017-10-28 住1晚</p>
+                        <div class="btns">
+                            <a class="weui-btn weui-btn_default" @click="handleCancelOrder">取消订单</a>
+                            <a class="weui-btn weui-btn_primary">立即支付</a>
+                        </div>
+                    </div>
+                </div>
+                <!--酒店订单-->
+                <div class="order-item">
+                    <div class="order-hd wd-bd-bottom">
+                        <i class="jiudian"></i>
+                        <h3>酒店</h3>
+                        <label>待支付</label>
+                    </div>
+                    <div class="order-bd">
+                        <div class="order-title">
+                            <div class="name">上海龙之梦大酒店</div>
+                            <div class="price"><i>¥</i>788</div>
+                        </div>
+                        <p>房间类型：标准房 1间</p>
+                        <p>入住日期：2017-10-28 住1晚</p>
+                    </div>
+                </div>
+                <!--自由行订单-->
+                <div class="order-item">
+                    <div class="order-hd wd-bd-bottom">
+                        <i class="ziyouxing"></i>
+                        <h3>自由行</h3>
+                        <label>待支付</label>
+                    </div>
+                    <div class="order-bd">
+                        <div class="order-title">
+                            <div class="name">上海龙之梦大酒店</div>
+                            <div class="price"><i>¥</i>788</div>
+                        </div>
+                        <p>房间类型：标准房 1间</p>
+                        <p>入住日期：2017-10-28 住1晚</p>
+                    </div>
+                </div>
+                <!--邮轮订单-->
+                <div class="order-item">
+                    <div class="order-hd wd-bd-bottom">
+                        <i class="youlun"></i>
+                        <h3>邮轮</h3>
+                        <label>待支付</label>
+                    </div>
+                    <div class="order-bd">
+                        <div class="order-title">
+                            <div class="name">上海龙之梦大酒店</div>
+                            <div class="price"><i>¥</i>788</div>
+                        </div>
+                        <p>房间类型：标准房 1间</p>
+                        <p>入住日期：2017-10-28 住1晚</p>
+                    </div>
+                </div>
+                <!--签证订单-->
+                <div class="order-item">
+                    <div class="order-hd wd-bd-bottom">
+                        <i class="qianzheng"></i>
+                        <h3>签证</h3>
+                        <label>待支付</label>
+                    </div>
+                    <div class="order-bd">
+                        <div class="order-title">
+                            <div class="name">上海龙之梦大酒店</div>
+                            <div class="price"><i>¥</i>788</div>
+                        </div>
+                        <p>房间类型：标准房 1间</p>
+                        <p>入住日期：2017-10-28 住1晚</p>
+                    </div>
+                </div>
+                <!--跟团游订单-->
+                <div class="order-item">
+                    <div class="order-hd wd-bd-bottom">
+                        <i class="gengtuanyou"></i>
+                        <h3>跟团游</h3>
+                        <label>待支付</label>
+                    </div>
+                    <div class="order-bd">
+                        <div class="order-title">
+                            <div class="name">上海龙之梦大酒店</div>
+                            <div class="price"><i>¥</i>788</div>
+                        </div>
+                        <p>房间类型：标准房 1间</p>
+                        <p>入住日期：2017-10-28 住1晚</p>
+                    </div>
+                </div>
+                <!--当地游订单-->
+                <div class="order-item">
+                    <div class="order-hd wd-bd-bottom">
+                        <i class="dangdiyou"></i>
+                        <h3>当地游</h3>
+                        <label>待支付</label>
+                    </div>
+                    <div class="order-bd">
+                        <div class="order-title">
+                            <div class="name">上海龙之梦大酒店</div>
+                            <div class="price"><i>¥</i>788</div>
+                        </div>
+                        <p>房间类型：标准房 1间</p>
+                        <p>入住日期：2017-10-28 住1晚</p>
+                    </div>
+                </div>
+                <!--酒店套餐订单-->
+                <div class="order-item">
+                    <div class="order-hd wd-bd-bottom">
+                        <i class="jiudiantaocan"></i>
+                        <h3>酒店套餐</h3>
+                        <label>待支付</label>
+                    </div>
+                    <div class="order-bd">
+                        <div class="order-title">
+                            <div class="name">上海龙之梦大酒店</div>
+                            <div class="price"><i>¥</i>788</div>
+                        </div>
+                        <p>房间类型：标准房 1间</p>
+                        <p>入住日期：2017-10-28 住1晚</p>
+                    </div>
+                </div>
             </div>
             <!--没有订单情况-->
             <div class="no-records">
@@ -197,8 +197,7 @@
           {
             id: 7,
             text: '邮轮'
-          }
-          ,
+          },
           {
             id: 8,
             text: '签证'
@@ -214,25 +213,10 @@
       setTimeout(() => {
         this.c_PageShow = true
       }, 10)
-      this.init()
+      utils.setTitle('我的订单')
     },
 
     methods: {
-      // 初始化方法
-      init: function () {
-        let isLogin = sessionStorage.getItem('isLogin')
-        if (isLogin === 'true') {
-          // do nothing
-        } else {
-          // axios.get(cm.myHome.saveFromRoute, {
-          //   params: {
-          //     fromRoute: '/myOrders'
-          //   }
-          // })
-          // this.$router.replace('/wxlogin')
-        }
-        utils.setTitle('我的订单')
-      },
       handleCancelOrder: function () {
         this.noscroll = true
         weui.confirm('您是否要取消该订单吗', {
