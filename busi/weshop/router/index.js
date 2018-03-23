@@ -9,6 +9,7 @@ const Home = () => import('@/page/Home')
 const My = () => import('@/page/My')
 const VisitorInfos = () => import('@/page/VisitorInfos')
 const TicketVisitor = () => import('@/page/TicketVisitor')
+const TicketMore = () => import('@/page/TicketMore')
 const WxLogin = () => import('@/page/WxLogin')
 const BindMobile = () => import('@/page/BindMobile')
 const WeShopAgreement = () => import('@/page/WeShopAgreement')
@@ -85,6 +86,11 @@ const router = new Router({
       path: '/ticket/detail',
       name: 'ticketdetail',
       component: TicketDetail
+    },
+    {
+      path: '/ticket/more',
+      name: 'ticketmore',
+      component: TicketMore
     },
     {
       path: '/ticket/introduction',
