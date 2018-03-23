@@ -13,6 +13,7 @@
             :ticketIndex="ticketIndex"
             v-on:moreDateClick="moreDateClick"
             v-on:selectDateNormal="selectDateNormal"
+            v-on:handlePlayTime="handlePlayTime"
           />
         </template>
 
@@ -38,8 +39,9 @@
             <!--<input class="searchInput" name="contactName" v-model="ticketInfo.contactName" type="text" placeholder="必填">-->
             <cell-input placeholder="请输入中文姓名" ref="contactName" v-model="ticketInfo.contactName"
                         :validator="validateChineseName"/>
-            <!--<i class="inputRemove"></i>-->
-
+            <div class="btn-box">
+              <div class="btn" @click="handleTrans2En">转英文</div>
+            </div>
           </div>
           <div>
             <span class="width-auto">姓(拼音)</span>
@@ -48,7 +50,6 @@
                    placeholder="">-->
             <cell-input placeholder="例：李，填Li" ref="contactLastName" v-model="ticketInfo.contactLastName"
                         :validator="validateEnName"/>
-            <!--<i class="inputRemove"></i>-->
           </div>
           <div>
             <span class="width-auto">名(拼音)</span>
@@ -57,7 +58,6 @@
                    placeholder="例：明，填Ming">-->
             <cell-input placeholder="例：明，填Ming" ref="contactFirstName" v-model="ticketInfo.contactFirstName"
                         :validator="validateEnName"/>
-            <!--<i class="inputRemove"></i>-->
           </div>
           <div class="gender">
             <span>人群</span>
@@ -86,8 +86,6 @@
             <!--<input name="contactEmail" v-model="ticketInfo.contactEmail" type="tel" placeholder="用于接收协议等">-->
             <cell-input type="email" ref="ticketInfo.contactEmail" placeholder="选填" v-model="ticketInfo.contactEmail"
                         :validator="validateEmail"/>
-
-            <!--<i class="inputRemove"></i>-->
           </div>
           <div class="gender">
             <span>性别</span>
@@ -105,7 +103,8 @@
             <!--<input name="" v-model="" class="searchInput" type="search"
                    placeholder="用于景区入园等凭证" maxlength="20">-->
 
-            <cell-input placeholder='与证件保持一致' ref="ticketInfo.contactCertificatesNumber" v-model="ticketInfo.contactCertificatesNumber"
+            <cell-input placeholder='与证件保持一致' ref="ticketInfo.contactCertificatesNumber"
+                        v-model="ticketInfo.contactCertificatesNumber"
                         :validator="ticketInfo.contactCertificatesTypeId==='ID_CARD'?validateIdCard:validateOtherCard"/>
 
           </div>
@@ -132,7 +131,6 @@
             <!--<input class="searchInput" name="contactName" v-model="mailInfo.contactName" type="text" placeholder="必填">-->
             <cell-input placeholder="请输入中文姓名" ref="contactName" v-model="mailInfo.contactName"
                         :validator="validateChineseName"/>
-            <!--<i class="inputRemove"></i>-->
           </div>
           <div>
             <span class="width-auto">手机号</span>
@@ -141,7 +139,6 @@
                    placeholder="必填">-->
             <cell-input ref="contactMobile" type="number" pattern="[0-9]*" placeholder="请输入手机号码"
                         v-model="mailInfo.contactMobile" :validator="validate86Mobile"/>
-            <!--<i class="inputRemove"></i>-->
           </div>
           <div class="infoError" @click="handleChooseLocation">
             <span class="width-auto">所在地</span>
@@ -219,6 +216,173 @@
       </div>
       <div class="refer">提交订单</div>
     </div>
+    <section class="weui-wrap">
+      <!--英文姓选择弹层-->
+      <section class="en-surname" v-if="surNamesShow">
+        <div class="weui-mask weui-animate-fade-in"></div>
+        <div class="weui-dialog weui-animate-fade-in">
+          <div class="weui-dialog__hd"><strong class="weui-dialog__title">请选择英文姓</strong></div>
+          <div class="weui-dialog__bd ">
+            <div class="weui-dialog__tip">与证件所示英文姓一致</div>
+            <div class="sur-names">
+              <a v-for="(item,index) in selSurNames.items" :key="index" class="wd-bd"
+                 :class="{selected:index===selSurNames.index}"
+                 @click="handleChooseSurName(index)">{{item.zh+item.en}}</a>
+            </div>
+          </div>
+          <div class="weui-dialog__ft">
+            <a href="javascript:" class="weui-dialog__btn weui-dialog__btn_default" @click="handleCloseSurName">手动填写</a>
+            <a href="javascript:" class="weui-dialog__btn weui-dialog__btn_primary" @click="handleConfirmSurName">确定</a>
+          </div>
+        </div>
+      </section>
+      <!--名字多音字选择弹层-->
+      <section class="en-givenname" v-if="givenNameShow">
+        <div class="weui-mask weui-animate-fade-in"></div>
+        <div class="weui-dialog weui-animate-fade-in">
+          <div class="weui-dialog__hd"><strong class="weui-dialog__title">请选择多音字</strong></div>
+          <div class="weui-dialog__bd ">
+            <div class="weui-dialog__tip">与证件所示拼音一致</div>
+            <div class="dy-line" v-for="(item,index) in selGivenNames" :key="index" v-show="item.en.length>1">
+              <div class="dy-z">{{item.zh}}</div>
+              <div class="sur-names">
+                <a class="wd-bd" v-for="(item1,index1) in item.en" :key="index1" :class="{selected:index1===item.index}"
+                   @click="handleChooseGivenName(index,index1)">{{item1}}</a>
+              </div>
+            </div>
+          </div>
+          <div class="weui-dialog__ft">
+            <a href="javascript:" class="weui-dialog__btn weui-dialog__btn_default"
+               @click="handleCloseGivenName">手动填写</a>
+            <a href="javascript:" class="weui-dialog__btn weui-dialog__btn_primary"
+               @click="handleConfirmGivenName">确定</a>
+          </div>
+        </div>
+      </section>
+      <!--姓名填写说明弹层-->
+      <section class="name-rule" v-if="nameRuleShow">
+        <div class="weui-mask"></div>
+        <div class="weui-actionsheet" :class="{'weui-actionsheet_toggle':nameRuleAniShow}">
+          <div class="rule-title">姓名填写说明</div>
+          <div class="rule-content">
+            <p style="margin: 0">姓名需与所持证件一致。</p>
+            <p style="margin: 0">使用香港、台湾、澳门的护照，不能乘坐国内航班。</p>
+            <div class="p-title"><i>中</i>中文姓名填写：</div>
+            <p>生僻字可用拼音代替，如：“王嚈君”填写为：</p>
+            <div class="box-line">
+              <div class="weui-cell">
+                <div class="weui-cell__hd">
+                  <label class="weui-label" style="line-height: 12px;">中文姓名</label>
+                </div>
+                <div class="weui-cell__bd">
+                  <div class="box-con">王yan君</div>
+                </div>
+              </div>
+            </div>
+            <p>姓名中有特殊字符，无需输入。如：“汉祖然·买买提”填写为：</p>
+            <div class="box-line">
+              <div class="weui-cell">
+                <div class="weui-cell__hd">
+                  <label class="weui-label" style="line-height: 12px;">中文姓名</label>
+                </div>
+                <div class="weui-cell__bd">
+                  <div class="box-con">汉祖然买买提</div>
+                </div>
+              </div>
+            </div>
+            <div class="p-title"><i>英</i>英文姓名填写：</div>
+            <p>1、中文姓名“张三”填写为：</p>
+            <div class="box-line">
+              <div class="weui-cell">
+                <div class="weui-cell__hd">
+                  <label class="weui-label" style="line-height: 12px;">英文姓</label>
+                  <i class="e-name-i" style="font-size: 10px;font-style: normal">Surname</i>
+                </div>
+                <div class="weui-cell__bd">
+                  <div class="box-con">ZHANG</div>
+                </div>
+              </div>
+              <div class="weui-cell">
+                <div class="weui-cell__hd">
+                  <label class="weui-label" style="line-height: 12px;">英文名</label>
+                  <i class="e-name-i" style="font-size: 10px;font-style: normal">Given names</i>
+                </div>
+                <div class="weui-cell__bd">
+                  <div class="box-con">SAN</div>
+                </div>
+              </div>
+            </div>
+            <p>2、英文姓名</p>
+            <p>·姓与名总长度小于等于26个字符，若过长请使用缩写。如Anastasia Cassandra Christina缩写为：</p>
+            <div class="box-line">
+              <div class="weui-cell">
+                <div class="weui-cell__hd">
+                  <label class="weui-label" style="line-height: 12px;">英文姓</label>
+                  <i class="e-name-i" style="font-size: 10px;font-style: normal">Surname</i>
+                </div>
+                <div class="weui-cell__bd">
+                  <div class="box-con">CHRISTINA</div>
+                </div>
+              </div>
+              <div class="weui-cell">
+                <div class="weui-cell__hd">
+                  <label class="weui-label" style="line-height: 12px;">英文名</label>
+                  <i class="e-name-i" style="font-size: 10px;font-style: normal">Given names</i>
+                </div>
+                <div class="weui-cell__bd">
+                  <div class="box-con">AC</div>
+                </div>
+              </div>
+            </div>
+            <P>·Middle name填写在Given name（英文名）栏，并填写在given name之后，以空格区分。如“Losie Smith Paul”填写为：</P>
+            <div class="box-line">
+              <div class="weui-cell">
+                <div class="weui-cell__hd">
+                  <label class="weui-label" style="line-height: 12px;">英文姓</label>
+                  <i class="e-name-i" style="font-size: 10px;font-style: normal">Surname</i>
+                </div>
+                <div class="weui-cell__bd">
+                  <div class="box-con">PAUL</div>
+                </div>
+              </div>
+              <div class="weui-cell">
+                <div class="weui-cell__hd">
+                  <label class="weui-label" style="line-height: 12px;">英文名</label>
+                  <i class="e-name-i" style="font-size: 10px;font-style: normal">Given names</i>
+                </div>
+                <div class="weui-cell__bd">
+                  <div class="box-con">LOSIE SMITH</div>
+                </div>
+              </div>
+            </div>
+            <P>·姓名中含特殊符号时，在姓名中不输入，名中用空格代替。如“jame.M-C Black.s_a”填写为：</P>
+            <div class="box-line">
+              <div class="weui-cell">
+                <div class="weui-cell__hd">
+                  <label class="weui-label" style="line-height: 12px;">英文姓</label>
+                  <i class="e-name-i" style="font-size: 10px;font-style: normal">Surname</i>
+                </div>
+                <div class="weui-cell__bd">
+                  <div class="box-con">BLACKSA</div>
+                </div>
+              </div>
+              <div class="weui-cell">
+                <div class="weui-cell__hd">
+                  <label class="weui-label" style="line-height: 12px;">英文名</label>
+                  <i class="e-name-i" style="font-size: 10px;font-style: normal">Given names</i>
+                </div>
+                <div class="weui-cell__bd">
+                  <div class="box-con">JAMEMC</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="rule-btn">
+            <a class="weui-btn weui-btn_primary" @click="handleCloseNameRule">确定</a>
+          </div>
+        </div>
+      </section>
+    </section>
   </section>
 </template>
 
@@ -228,6 +392,7 @@
   import TicketOrderItem from '../components/ticket/TicketOrderItem'
   import CellInput from '../components/visitor-infos/CellInput'
   import * as utils from '../util/utils'
+  import pinyin from '../util/pinyin'
 
   const CaTypes = [
     {
@@ -351,6 +516,24 @@
     }
   ]
 
+  const playTimes = [
+    {
+      value: '0',
+      stock: 0,
+      label: '13:00-14:00'
+    },
+    {
+      value: '1',
+      stock: 30,
+      label: '15:00-16:00'
+    },
+    {
+      value: '2',
+      stock: 50,
+      label: '16:00-17:00'
+    }
+  ]
+
   export default {
     name: 'ticket-order',
     components: {
@@ -372,7 +555,10 @@
             info: {
               title: '东方明珠观光E票-成人票',
               tip: '预订成功后1小时30分可入园',
-
+              hasTime: true,
+              timeId: '0',
+              time: '13:00-14:00',
+              timeStock: 0,
               num: 1,
               maxNum: 5,
               selectedIndex: 3
@@ -426,7 +612,7 @@
         //取票人信息
         ticketInfo: {
           //姓名
-          contactName: '张三',
+          contactName: '令狐冲',
 
           //姓
           contactLastName: '张',
@@ -478,7 +664,23 @@
           //快递
         },
 
-        payPaneShow: false
+        payPaneShow: false,
+
+        // 供选择的英文姓
+        selSurNames: {
+          index: 0,
+          items: [{
+            zh: '',
+            en: ''
+          }]
+        },
+        selGivenNames: [],
+        // 供选择的英文姓弹窗开关
+        surNamesShow: false,
+        givenNameShow: false,
+        nameRuleShow: false,
+        nameRuleAniShow: false,
+        enNames: []
       }
     },
     computed: {
@@ -630,7 +832,23 @@
           onConfirm: (result) => {
             this.ticketInfo.contactCertificatesTypeId = result[0].value
             this.ticketInfo.contactCertificatesType = result[0].label
-            // this.ticketInfo.contactCertificatesNumber = ''
+          }
+        })
+      },
+      handlePlayTime: function (options) {
+        weui.picker(playTimes, {
+          container: 'body',
+          defaultValue: playTimes[0],
+          onConfirm: (result) => {
+            let ticketList = this.ticketList
+            for (let i = 0; i < ticketList.length; i++) {
+              let ticket = ticketList[i]
+              if (ticket.id === options.id) {
+                ticket.info.timeId = result[0].value
+                ticket.info.time = result[0].label
+                ticket.info.timeStock = result[0].stock
+              }
+            }
           }
         })
       },
@@ -734,6 +952,166 @@
           return {
             errmsg: '联系电话格式有误，请重新输入'
           }
+        }
+      },
+
+      // 英文姓选择事件
+      handleChooseSurName: function (index) {
+        this.selSurNames.index = index
+      },
+      // 英文名多音选择事件
+      handleChooseGivenName: function (index, index1) {
+        this.selGivenNames[index].index = index1
+      },
+      // 关闭英文姓选择事件
+      handleCloseSurName: function () {
+        this.surNamesShow = false
+      },
+      // 关闭英文名选择事件
+      handleCloseGivenName: function () {
+        this.givenNameShow = false
+      },
+      // 英文姓选择确定点击事件
+      handleConfirmSurName: function () {
+        // this.surName = this.selSurNames.items[this.selSurNames.index].en
+        this.surNamesShow = false
+        // 复姓选择
+        if (this.enNames.length > 1) {
+          this.enNames = [
+            this.enNames[this.selSurNames.index]
+          ]
+          // 姓多音字选择
+        } else if (this.enNames[0].surName.en.length > 1) {
+          this.enNames[0].surName.en = [this.enNames[0].surName.en[this.selSurNames.index]]
+        }
+        this.trans2En()
+      },
+      // 英文名选择确定点击事件
+      handleConfirmGivenName: function () {
+        this.givenNameShow = false
+        this.enNames[0].givenName.forEach((item, index) => {
+          item.en = [this.selGivenNames[index].en[this.selGivenNames[index].index]]
+        })
+        this.trans2En()
+      },
+
+      // 点击转换英文事件
+      handleTrans2En: function () {
+        // this.surNamesShow = true
+        let cName = this.ticketInfo.contactName
+        // 输入太短 不予处理
+        if (cName.length < 2) {
+          return
+        }
+        // 姓名只有两个字,不可能存在复姓
+        if (cName.length === 2) {
+          this.enNames = [{
+            surName: {
+              zh: cName[0],
+              en: pinyin.getPinyin(cName[0])
+            },
+            givenName: [{
+              zh: cName[1],
+              en: pinyin.getPinyin(cName[1])
+            }]
+          }]
+        }
+        // 姓名超两个字
+        if (cName.length > 2) {
+          let a = {
+            surName: {
+              zh: cName[0],
+              en: pinyin.getPinyin(cName[0])
+            },
+            givenName: []
+          }
+          for (let i = 1; i < cName.length; i++) {
+            a.givenName.push({
+              zh: cName[i],
+              en: pinyin.getPinyin(cName[i])
+            })
+          }
+          this.enNames = [a]
+          if (pinyin.getFuxingPinyin(cName)) {
+            // 存在复姓可能
+            let fx = pinyin.getFuxingPinyin(cName)
+            let b = {
+              surName: {
+                zh: cName.substr(0, 2),
+                en: [fx]
+              },
+              givenName: []
+            }
+            for (let i = 2; i < cName.length; i++) {
+              b.givenName.push({
+                zh: cName[i],
+                en: pinyin.getPinyin(cName[i])
+              })
+            }
+            this.enNames.push(b)
+          }
+        }
+        console.log(this.enNames)
+        this.trans2En()
+      },
+
+      // 中文转英文
+      trans2En: function () {
+        // 存在复姓选择
+        if (this.enNames.length > 1) {
+          this.selSurNames.index = 0
+          this.selSurNames.items = []
+          this.selSurNames.items.push({
+            zh: this.enNames[0].surName.zh,
+            en: this.enNames[0].surName.en[0]
+          })
+          this.selSurNames.items.push({
+            zh: this.enNames[1].surName.zh,
+            en: this.enNames[1].surName.en[0]
+          })
+          this.surNamesShow = true
+          return
+        }
+        // 姓多音选择
+        if (this.enNames[0].surName.en.length > 1) {
+          this.selSurNames.index = 0
+          this.selSurNames.items = []
+          this.enNames[0].surName.en.forEach(item => {
+            this.selSurNames.items.push({
+              zh: this.enNames[0].surName.zh,
+              en: item
+            })
+          })
+          this.surNamesShow = true
+          return
+        }
+
+        this.ticketInfo.contactLastName = this.enNames[0].surName.en[0]
+
+        // 处理名多音字
+        let dymNum = 0
+        this.selGivenNames = []
+        this.enNames[0].givenName.forEach(item => {
+          let givenName = {
+            index: 0,
+            zh: item.zh,
+            en: item.en
+          }
+          this.selGivenNames.push(givenName)
+          if (item.en.length > 1) {
+            dymNum++
+          }
+        })
+        // 名字里存在多音字
+        if (dymNum > 0) {
+          this.givenNameShow = true
+        } else {
+          // 名字里不存在多音字
+          let bbb = ''
+          this.selGivenNames.forEach(item => {
+            bbb = bbb + '' + item.en[0]
+          })
+          this.ticketInfo.contactFirstName = bbb
         }
       }
     }
@@ -866,9 +1244,7 @@
 
   .splitComb {
     margin: 0 10px 10px;
-    background: #FFFFFF;
     box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.05);
-    border-radius: 5px;
   }
 
   .inputRemove {
@@ -1244,6 +1620,227 @@
           }
         }
       }
+    }
+  }
+
+  .weui-cell__bd {
+    position: absolute !important;
+    left: 84px;
+    top: 0;
+  }
+
+  .btn-box {
+    position: absolute;
+    top: 0;
+    right: 0;
+    .btn {
+      background-color: #fff;
+      line-height: 22px;
+      color: #ff8800;
+      font-size: 12px;
+      border: 1px solid #ff8800;
+      margin: 10px;
+      padding: 0 10px;
+      border-radius: 4px;
+    }
+  }
+
+  .weui-cell__bd {
+    position: relative;
+    input {
+      top: 0;
+    }
+    * {
+      transition: .3s all;
+    }
+    .err {
+      font-size: 10px;
+      color: #FF5465;
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      z-index: 1;
+    }
+    .weui-input {
+      position: relative;
+      z-index: 2;
+    }
+    &.showerr {
+      .err {
+        opacity: 1;
+        top: -6px;
+      }
+      input {
+        top: 6px;
+      }
+    }
+  }
+
+  .weui-select {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .weui-dialog__title {
+    font-size: 14px;
+    color: #333333;
+  }
+
+  .weui-dialog__tip {
+    font-size: 12px;
+    color: #999999;
+  }
+
+  .weui-dialog__btn {
+    font-size: 14px;
+  }
+
+  .weui-dialog__btn_default {
+    color: #999999;
+  }
+
+  .weui-dialog__btn_primary{
+    color: #ff8800;
+  }
+
+  .sur-names {
+    display: flex;
+    margin-top: 10px;
+    flex-wrap: wrap;
+    a {
+      display: block;
+      width: 40%;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      font-size: 12px;
+      color: #333333;
+      margin-right: 20%;
+      margin-bottom: 10px;
+      &:nth-child(2n+0) {
+        margin-right: 0;
+      }
+    }
+  }
+
+  .dy-line {
+    display: flex;
+    margin-top: 10px;
+    .dy-z {
+      line-height: 30px;
+    }
+    .sur-names {
+      flex: 1;
+      margin-top: 0;
+      margin-left: 10px;
+    }
+  }
+
+  .wd-bd {
+    position: relative;
+    &.selected {
+      &:after {
+        border: 1px solid #ff8800;
+      }
+      &:before {
+        content: "";
+        position: absolute;
+        bottom: -1px;
+        right: -1px;
+        background: url("../images/selectDate.png") no-repeat center;
+        background-size: 100%;
+        width: 13px;
+        height: 13px;
+      }
+    }
+  }
+
+  .weui-dialog {
+    width: 75%;
+  }
+
+  .en-surname, .en-givenname {
+    .weui-dialog__bd {
+      padding-top: 5px;
+    }
+  }
+
+  .name-rule {
+    .weui-actionsheet {
+      border-top-right-radius: 10px;
+      border-top-left-radius: 10px;
+      background-color: #FCFCFD;
+      overflow: hidden;
+      top: 100px;
+      box-sizing: border-box;
+      padding: 0 15px;
+      font-size: 16px;
+      color: #333333;
+      line-height: 70px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+    }
+    .rule-content {
+      flex: 1;
+      /*overflow-y: auto;*/
+      text-align: left;
+      padding-bottom: 10px;
+      overflow: scroll;
+      -webkit-overflow-scrolling: touch;
+      p {
+        font-size: 12px;
+        color: #666666;
+        line-height: 20px;
+        margin: 10px 0;
+      }
+      .p-title {
+        font-size: 13px;
+        color: #333333;
+        height: 14px;
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+        i {
+          box-sizing: border-box;
+          border: 1px solid #35b735;
+          display: block;
+          width: 14px;
+          height: 14px;
+          margin-right: 5px;
+          font-size: 10px;
+          font-style: normal;
+          line-height: 14px;
+          text-align: center;
+          color: #35b735;
+        }
+      }
+      .box-line {
+        background: #FFFFFF;
+        border: 1px solid #DDDDDD;
+        line-height: 22px;
+        font-size: 14px;
+        .weui-label {
+          color: #666666;
+        }
+        .box-con {
+          color: #333333;
+        }
+      }
+    }
+    .rule-btn {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 20px 0;
+    }
+  }
+
+  .edit-wrap {
+    .weui-cell_select-before .weui-cell__hd:after {
+      transform: none;
+      border: none;
     }
   }
 </style>

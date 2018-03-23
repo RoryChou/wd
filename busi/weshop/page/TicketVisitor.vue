@@ -63,44 +63,55 @@
         loadingTxt: '数据加载中',
         deleteConfirmDlg: false,
         targetVisitor: {},
-        'visitorInfos': [
-          {
-            'id': 10,
-            'name': '任静',
-            'mobile': '15615201573',
-            'idCard': '47731655468379797512153'
-          },
-          {
-            'id': 10,
-            'name': '阎刚',
-            'mobile': '15655838580',
-            'idCard': '68680123288884567836299'
-          },
-          {
-            'id': 14,
-            'name': '陈超',
-            'mobile': '15621178058',
-            'idCard': '14840832592675544168676'
-          },
-          {
-            'id': 76,
-            'name': '胡敏',
-            'mobile': '15691524141',
-            'idCard': '38147481879278357346521'
-          },
-          {
-            'id': 63,
-            'name': '郑桂英',
-            'mobile': '15633838836',
-            'idCard': '02185134582456663697995'
-          },
-          {
-            'id': 89,
-            'name': '邱杰',
-            'mobile': '15653235784',
-            'idCard': '27182828138868955592739'
-          }
-        ]
+        'visitorInfos': [{
+          'visitorId': 65,
+          'memberId': 57,
+          'visitorName': '张小凡',
+          'visitorType': 'ADULT',
+          'visitorMobile': '86-15651980339',
+          'visitorEmail': '',
+          'lastName': 'ZHANG',
+          'firstName': 'XIAOFAN',
+          'sex': '1',
+          'birthday': '1980-09-18',
+          'updateTime': 1521094117000,
+          'createTime': 1521094117000,
+          'visitorCardRelation': [{
+            'cardRelationId': 274,
+            'visitorId': 65,
+            'cardType': 'ID_CARD',
+            'cardNumber': '321084199003317219',
+            'updateTime': null,
+            'createTime': null,
+            'type': '身份证'
+          }],
+          'mobileNum': '15651980339',
+          'regionNum': '86'
+        }, {
+          'visitorId': 66,
+          'memberId': 57,
+          'visitorName': '张小凡',
+          'visitorType': 'ADULT',
+          'visitorMobile': '86-15651980339',
+          'visitorEmail': '',
+          'lastName': 'ZHANG',
+          'firstName': 'XIAOFAN',
+          'sex': '1',
+          'birthday': '1980-09-18',
+          'updateTime': 1521094117000,
+          'createTime': 1521094117000,
+          'visitorCardRelation': [{
+            'cardRelationId': 274,
+            'visitorId': 65,
+            'cardType': 'ID_CARD',
+            'cardNumber': '321084199003317219',
+            'updateTime': null,
+            'createTime': null,
+            'type': '身份证'
+          }],
+          'mobileNum': '15651980339',
+          'regionNum': '86'
+        }]
       }
     },
     mounted () {

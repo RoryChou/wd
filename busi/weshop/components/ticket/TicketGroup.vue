@@ -29,7 +29,7 @@
                   </div>
                 </div>
               </div>
-              <router-link class="btn" :to="{ path: '/ticket/order', query: { id: ticket.id }}">
+              <router-link class="btn btn-disabled" :to="{ path: '/ticket/order', query: { id: ticket.id }}">
                 <span>预订</span>
               </router-link>
             </div>
@@ -455,7 +455,20 @@
           width: 60px;
           height: 24px;
           line-height: 24px;
-          background-image: url(../../images/btn_bg.png);
+          /*background-image: url(../../images/btn_bg.png);*/
+
+
+          border-radius: 24px;
+
+          background: rgb(255,140,39);
+          background: -moz-linear-gradient(left,  rgba(255,140,39,1) 0%, rgba(255,102,0,1) 100%);
+          background: -webkit-linear-gradient(left,  rgba(255,140,39,1) 0%,rgba(255,102,0,1) 100%);
+          background: linear-gradient(to right,  rgba(255,140,39,1) 0%,rgba(255,102,0,1) 100%);
+          filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff8c27', endColorstr='#ff6600',GradientType=1 );
+
+
+
+
           background-size: 100%;
           -webkit-background-size: 100%;
           color: #fff;
@@ -470,6 +483,9 @@
           }
           .special {
             display: none;
+          }
+          &.btn-disabled {
+            opacity: 0.5;
           }
         }
       }

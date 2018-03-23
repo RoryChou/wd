@@ -97,8 +97,7 @@
       }
 
       // 假装拉取数据
-      // let url = 'https://www.easy-mock.com/mock/5aa6313619bd8f2d97b03024/calendar/date'
-      let url = 'http://10.112.3.97/github/data/date.json'
+      let url = 'https://www.easy-mock.com/mock/5aa6313619bd8f2d97b03024/calendar/date'
       axios.get(url)
         .then(res => {
           let resData = res.data

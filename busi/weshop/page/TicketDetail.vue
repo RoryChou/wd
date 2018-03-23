@@ -16,12 +16,22 @@
       </div>
       <section class="swiper-wrap">
         <swiper :options="c_SwiperOption">
-          <swiper-slide><a><img data-src="//pics.lvjs.com.cn//uploads/pc/place2/2017-06-23/294d8e11-7cb7-4e46-a8e5-96c237775de9_1280_.jpg" class="swiper-lazy"/></a></swiper-slide>
-          <swiper-slide><a><img data-src="//pic.lvmama.com//uploads/pc/place2/2015-05-20/9deacddb-2a9b-4bf4-87be-eb934f799278_1280_.jpg" class="swiper-lazy"/></a></swiper-slide>
-          <swiper-slide><a><img data-src="//pic.lvmama.com//uploads/pc/place2/2017-05-08/ae67c3ad-6d9f-48ea-8748-e0f0c7ed7998_1280_.jpg" class="swiper-lazy"/></a></swiper-slide>
-          <swiper-slide><a><img data-src="//pic.lvmama.com//uploads/pc/place2/100792/1370684426225_1280_.jpg" class="swiper-lazy"/></a></swiper-slide>
-          <swiper-slide><a><img data-src="//pic.lvmama.com//uploads/pc/place2/100792/1370684416975_1280_.jpg" class="swiper-lazy"/></a></swiper-slide>
-          <swiper-slide><a><img data-src="//pic.lvmama.com//uploads/pc/place2/2015-06-17/963f004c-bb67-48d1-91af-6f548fe7b706_1280_.jpg" class="swiper-lazy"/></a></swiper-slide>
+          <swiper-slide><a><img
+            data-src="//pics.lvjs.com.cn//uploads/pc/place2/2017-06-23/294d8e11-7cb7-4e46-a8e5-96c237775de9_1280_.jpg"
+            class="swiper-lazy"/></a></swiper-slide>
+          <swiper-slide><a><img
+            data-src="//pic.lvmama.com//uploads/pc/place2/2015-05-20/9deacddb-2a9b-4bf4-87be-eb934f799278_1280_.jpg"
+            class="swiper-lazy"/></a></swiper-slide>
+          <swiper-slide><a><img
+            data-src="//pic.lvmama.com//uploads/pc/place2/2017-05-08/ae67c3ad-6d9f-48ea-8748-e0f0c7ed7998_1280_.jpg"
+            class="swiper-lazy"/></a></swiper-slide>
+          <swiper-slide><a><img data-src="//pic.lvmama.com//uploads/pc/place2/100792/1370684426225_1280_.jpg"
+                                class="swiper-lazy"/></a></swiper-slide>
+          <swiper-slide><a><img data-src="//pic.lvmama.com//uploads/pc/place2/100792/1370684416975_1280_.jpg"
+                                class="swiper-lazy"/></a></swiper-slide>
+          <swiper-slide><a><img
+            data-src="//pic.lvmama.com//uploads/pc/place2/2015-06-17/963f004c-bb67-48d1-91af-6f548fe7b706_1280_.jpg"
+            class="swiper-lazy"/></a></swiper-slide>
         </swiper>
         <div class="imgCount">
           <div class="swiper-number" slot="pagination"></div>
@@ -32,6 +42,7 @@
       <div class="productName">
         <p>东方明珠
           <i>[5A景区]</i>
+          <em>已下线</em>
         </p>
       </div>
       <div class="addressWrap"><p class="address">上海市浦东新区世纪大道1号</p></div>
@@ -46,6 +57,11 @@
         </div>
       </div>
       <div class="notice">光大银行信用卡支付满300减100</div>
+      <div class="supplier-box">
+        <div class="supplier">
+          <i class="supplier-lvmama"></i>供应商:驴妈妈旅游网
+        </div>
+      </div>
     </div>
     <ticket-group v-for="(item,index) in ticketGroups" :key="index" :iniOpened="index===0" :ticketGroup="item"/>
     <div class="detail-notice" ref="notice">
@@ -57,19 +73,24 @@
         </div>
         <div class="notice-list">
           <h2 class="redPoint">免票政策</h2>
-          <p class="noticeDesc">a. 1米（含）以下的儿童免票。<br>b. 现役军人、军残证、离休干部、烈属证（凭有限制证件享受观光B票）免费。<br>* 以上信息仅供参考，具体以景区当日信息为准。<br>* 以上政策仅免大门票。<br>* 如有其他消费项目，请按规定另行付费。</p>
+          <p class="noticeDesc">a. 1米（含）以下的儿童免票。<br>b. 现役军人、军残证、离休干部、烈属证（凭有限制证件享受观光B票）免费。<br>* 以上信息仅供参考，具体以景区当日信息为准。<br>*
+            以上政策仅免大门票。<br>* 如有其他消费项目，请按规定另行付费。</p>
         </div>
         <div class="notice-list">
           <h2 class="redPoint">优惠人群</h2>
-          <p class="noticeDesc">a. 1米（不含）～1.4米（含）的儿童享门市半价优惠。<br>b. 70周岁（含）以上的老人（凭有效身份证件）享门市价6折优惠。（旋转餐厅、可口可乐欢乐餐厅、东方明珠游船除外） <br>c. 残疾人士（凭有效证件）享门市价6折优惠。（旋转餐厅、可口可乐欢乐餐厅、东方明珠游船除外） <br>* 以上信息仅供参考，具体以景区当日信息为准。 <br>* 以上政策仅免大门票。 <br>* 如有其他消费项目，请按规定另行付费。</p>
+          <p class="noticeDesc">a. 1米（不含）～1.4米（含）的儿童享门市半价优惠。<br>b.
+            70周岁（含）以上的老人（凭有效身份证件）享门市价6折优惠。（旋转餐厅、可口可乐欢乐餐厅、东方明珠游船除外） <br>c. 残疾人士（凭有效证件）享门市价6折优惠。（旋转餐厅、可口可乐欢乐餐厅、东方明珠游船除外）
+            <br>* 以上信息仅供参考，具体以景区当日信息为准。 <br>* 以上政策仅免大门票。 <br>* 如有其他消费项目，请按规定另行付费。</p>
         </div>
         <div class="notice-list">
           <h2 class="redPoint">开具发票</h2>
-          <p class="noticeDesc">1. 请致电10106060，告知客服专员发票抬头和邮寄地址，我司在收到完整信息后向您寄送发票。为避免因发生不可抗力或意外事项致实际消费额与发票开具的相应数额不符，建议您在游玩归来后两个月内索领取发票。（在线支付）</p>
+          <p class="noticeDesc">1.
+            请致电10106060，告知客服专员发票抬头和邮寄地址，我司在收到完整信息后向您寄送发票。为避免因发生不可抗力或意外事项致实际消费额与发票开具的相应数额不符，建议您在游玩归来后两个月内索领取发票。（在线支付）</p>
         </div>
         <div class="notice-list">
           <h2 class="redPoint">温馨提示</h2>
-          <p class="noticeDesc">1.在不能满足设备安全运行的恶劣天气，无法抗拒的自然灾害情况下（如雷电、雨雪、冰雹、大雾、暴雨、台风等），景区部分项目将临时关闭或部分关闭，表演会取消或部分取消。<br>2.严禁倒票，一经发现，相关电子门票作废，入园现场将不予承认，驴妈妈旅游网将不予退费并将相关账号、手机号列入黑名单。请广大用户选择驴妈妈官方网站或官方合作渠道购买，维护自身权益不被侵犯。<br>3.景区活动内容如有变动，以当日公告为准。景区所有项目均会定期进行日检、周检、月检和年度检修，相关检修工作可能会造成部分项目运行时间的延迟或暂停对游客开放，详情以景区现场公告为准。<br>4.为保障您的出游安全，驴妈妈建议您订购在线支付产品时选购相关旅游保险。</p>
+          <p class="noticeDesc">1.在不能满足设备安全运行的恶劣天气，无法抗拒的自然灾害情况下（如雷电、雨雪、冰雹、大雾、暴雨、台风等），景区部分项目将临时关闭或部分关闭，表演会取消或部分取消。<br>2.严禁倒票，一经发现，相关电子门票作废，入园现场将不予承认，驴妈妈旅游网将不予退费并将相关账号、手机号列入黑名单。请广大用户选择驴妈妈官方网站或官方合作渠道购买，维护自身权益不被侵犯。<br>3.景区活动内容如有变动，以当日公告为准。景区所有项目均会定期进行日检、周检、月检和年度检修，相关检修工作可能会造成部分项目运行时间的延迟或暂停对游客开放，详情以景区现场公告为准。<br>4.为保障您的出游安全，驴妈妈建议您订购在线支付产品时选购相关旅游保险。
+          </p>
         </div>
       </div>
       <div class="notice-all">
@@ -778,6 +799,17 @@
           font-weight: 400;
           font-style: normal;
         }
+        em {
+          background: #C7CACE;
+          border-radius: 100px;
+          line-height: 18px;
+          font-size: 10px;
+          color: #fff;
+          margin-left: 5px;
+          font-weight: normal;
+          font-style: normal;
+          padding: 0 7px;
+        }
       }
     }
     .addressWrap {
@@ -880,8 +912,8 @@
       color: #5CA2F8;
       position: relative;
       overflow: hidden;
-      border-style: solid;
-      border-width: 0 0 1px;
+      /*border-style: solid;*/
+      /*border-width: 0 0 1px;*/
       &.promotionActivity {
         color: #666;
       }
@@ -910,6 +942,30 @@
         background: url(../images/after_icon.png) no-repeat;
         background-size: 8px 13px;
       }
+    }
+    .supplier-box {
+      display: flex;
+      padding: 10px 15px 15px 15px;
+    }
+    .supplier {
+      align-items: center;
+      line-height: 18px;
+      padding: 0 5px;
+      background: #FFFFFF;
+      border: 1px solid #BEC1CB;
+      border-radius: 100px;
+      display: flex;
+      overflow: hidden;
+      font-size: 10px;
+      color: #7F8496;
+    }
+    .supplier-lvmama {
+      margin-right: 4px;
+      display: block;
+      background-image: url(../images/supplier-lvmama.png);
+      width: 13px;
+      height: 14px;
+      background-size: cover;
     }
   }
 

@@ -14,6 +14,11 @@
         订票须知
       </p>
     </div>
+
+    <div class="sub-title">
+      组合套票1 东方明珠可口可乐欢乐餐厅自助午餐【含东方明珠灯塔观光】
+    </div>
+
     <div class="play-date">
       <p>游玩日期</p>
       <div class="choose1">
@@ -39,6 +44,79 @@
 
       </div>
     </div>
+
+    <div class="play-time">
+      <div class="title">
+        场次选择
+      </div>
+      <div @click="handlePlayTimeItem(id, info.time)" v-if="info.hasTime">
+
+        <div class="select unselected" v-if="!info.time">
+          请选择场次 <i></i>
+        </div>
+        <div class="select selected" v-if="info.time">
+
+          <em class="full" v-if="info.timeStock>30">库存充足</em>
+          <em class="empty" v-if="info.timeStock>info.num && info.timeStock<=30">库存紧张</em>
+          <em class="less" v-if="info.timeStock<info.num">库存不足</em>
+
+          {{info.time}}
+        </div>
+
+      </div>
+    </div>
+
+    <div class="sub-title">
+      组合套票1 东方明珠可口可乐欢乐餐厅自助午餐【含东方明珠灯塔观光】
+    </div>
+
+    <div class="play-date">
+      <p>游玩日期</p>
+      <div class="choose1">
+
+        <template v-for="(item, index) in calendar">
+          <span
+            v-bind:class="{selected: info.selectedIndex===index, isable: item.isable}"
+            @click="selectDateClick(index,item.isable, id)"
+          >今日{{dateStrToShortDateStr(item.date)}}<br>
+            <i>￥{{item.price}}</i>
+            <i class="select-icon"></i>
+          </span>
+        </template>
+
+        <span v-if="moreCalendar" @click="moreDateClickItem(ticketIndex, id)"
+              v-bind:class="{selected: info.selectedIndex===3, isable: true}"
+        >今日{{dateStrToShortDateStr(moreCalendar.date)}}<br>
+            <i>￥{{moreCalendar.price}}</i>
+            <i class="select-icon"></i>
+        </span>
+
+        <span v-if="!moreCalendar" class="lineh5" @click="moreDateClickItem(ticketIndex, id)">更多日期</span>
+
+      </div>
+    </div>
+
+    <div class="play-time">
+      <div class="title">
+        场次选择
+      </div>
+      <div @click="handlePlayTimeItem(id, info.time)" v-if="info.hasTime">
+
+        <div class="select unselected" v-if="!info.time">
+          请选择场次 <i></i>
+        </div>
+        <div class="select selected" v-if="info.time">
+
+          <em class="full" v-if="info.timeStock>30">库存充足</em>
+          <em class="empty" v-if="info.timeStock>info.num && info.timeStock<=30">库存紧张</em>
+          <em class="less" v-if="info.timeStock<info.num">库存不足</em>
+
+          {{info.time}}
+        </div>
+
+      </div>
+    </div>
+
     <div class="number">
       <p>购买数量<i>每单最多预订{{info.maxNum}}张</i></p>
       <!--<p>
@@ -50,6 +128,54 @@
         v-bind:max="info.maxNum"
         v-model="info.num"
       />
+
+    </div>
+    <div class="warning">
+      <i></i>当前出游日期不支持退改
+    </div>
+
+    <div class="link-ticket">
+
+      <div class="msg">
+        <div class="left">
+          <div class="name">
+            <p>{{info.title}}----联票</p>
+          </div>
+          <div class="trash"></div>
+        </div>
+      </div>
+
+      <p class="splitNotice">
+        订票须知
+      </p>
+
+
+      <div class="play-date-link">
+        <p>游玩日期</p>
+
+        <div class="right">
+
+          <div class="date">
+            明天 07-28
+          </div>
+          <div class="price">
+            <i>￥</i>320
+          </div>
+        </div>
+      </div>
+      <div class="number">
+        <p>购买数量<i>每单最多预订{{info.maxNum}}张</i></p>
+        <!--<p>
+          <i class="dec-count gray"></i>
+          <input type="tel" value="" v-model="info.num">
+          <i class="add-count"></i>
+        </p>-->
+        <NumberBox
+          v-bind:max="info.maxNum"
+          v-model="info.num"
+        />
+
+      </div>
 
     </div>
   </div>
@@ -89,6 +215,12 @@
             id: id
           })
         }
+      },
+      handlePlayTimeItem: function (id, time) {
+        this.$emit('handlePlayTime', {
+          time: time,
+          id: id
+        })
       }
     }
   }
@@ -98,11 +230,14 @@
   @import "../../style/base";
 
   .choose-module {
+    background: #FFFFFF;
+    border-radius: 5px;
     -webkit-border-image: url(data:image/gif;base64,R0lGODlhBQAFAPABANra2v///yH5BAUHAAEALAAAAAAFAAUAAAIHhB9pGatnCgA7) 2 stretch;
     border-style: solid;
     border-width: 1px 0 0;
     position: relative;
     margin-top: 10px;
+    margin-bottom: 10px;
     &:before, &:after {
       /*width: 18px;*/
       /*height: 16px;*/
@@ -227,7 +362,13 @@
     }
   }
 
+  .sub-title {
+    font-size: 16px;
+    margin: .2*50/@rem;
+  }
+
   .play-date {
+    border-top: 1px solid #f2f2f2;
     overflow: hidden;
     margin: .2*50/@rem;
     background: #fff;
@@ -318,6 +459,108 @@
           background-size: 8px 13px;
         }
       }
+    }
+  }
+
+  .play-time {
+    margin: .2*50/@rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .title {
+      font-size: 16px;
+    }
+    .select {
+      color: #999;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      i {
+        background-image: url(../../images/arrow-icon-1.png);
+        display: block;
+        width: 5px;
+        height: 8px;
+        background-size: cover;
+        margin-left: 5px;
+      }
+    }
+    em {
+      margin-right: 10px;
+      font-size: 12px;
+      font-style: normal;
+      &.full {
+        color: #00b71d;
+      }
+      &.empty {
+        color: #ca0d00;
+      }
+      &.less {
+        color: #c47900;
+      }
+    }
+  }
+
+  .warning {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    padding: 0.13333333rem 0.33333333rem 0 0.13333333rem;
+    i {
+      margin-right: 4px;
+      display: block;
+      width: 16px;
+      height: 16px;
+      background-image: url(../../images/attention-icon-1.png);
+      background-size: cover;
+
+    }
+  }
+
+  .link-ticket {
+    &:before {
+      position: absolute;
+      top: -8.5px;
+      left: 0;
+      content: "";
+      background: url(../../images/link-ticket.png) top right;
+      width: 7px;
+      height: 15px;
+      background-size: 15px;
+    }
+    &:after {
+      position: absolute;
+      top: -8.5px;
+      right: 0;
+      content: "";
+      background-image: url(../../images/link-ticket.png);
+      width: 7px;
+      height: 15px;
+      background-size: 15px;
+    }
+    position: relative;
+    border-top: 2px solid #f2f2f2;
+  }
+
+  .play-date-link {
+    border-top: 1px solid #f2f2f2;
+    margin-top: 10px;
+    padding-top: 10px;
+    font-size: 14px;
+    display: flex;
+
+    margin-left: 0.13333333rem;
+    margin-right: 0.13333333rem;
+    p {
+      flex-grow: 1;
+      width: 100px;
+    }
+    .date {
+      margin-right: 5px;
+      color: #6b6b6b;
+    }
+    .right {
+      display: flex;
     }
   }
 </style>

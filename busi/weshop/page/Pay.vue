@@ -72,6 +72,19 @@
       </div>
     </section>
 
+    <div class="js_dialog" id="iosDialog2" style="opacity: 1;" v-if="showPayError">
+      <div class="weui-mask"></div>
+      <div class="weui-dialog">
+        <div class="weui-dialog__bd">
+          <i class="weui-icon-warn"></i>
+          支付失败
+        </div>
+        <div class="weui-dialog__ft">
+          <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary" @click="handlerPayError">知道了</a>
+        </div>
+      </div>
+    </div>
+
   </section>
 </template>
 
@@ -86,6 +99,7 @@
     },
     data () {
       return {
+        showPayError: false,
         hasPay: false,
         c_PageShow: false,
         clientHeight: document.documentElement.clientHeight,
@@ -140,11 +154,16 @@
 
         if (this.remainderPaymentTime > 0) {
           this.toHas()
+        } else {
+          this.showPayError = true
         }
 
       },
       toHas: function () {
         this.hasPay = true
+      },
+      handlerPayError: function () {
+        this.showPayError = false
       }
     }
   }
