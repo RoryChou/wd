@@ -1,10 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import { getUserInfo } from '@/api/user'
 
 Vue.use(Router)
 
-// import weui from 'weui.js'
 const Home = () => import('@/page/Home')
 const My = () => import('@/page/My')
 const VisitorInfos = () => import('@/page/VisitorInfos')
@@ -25,6 +23,9 @@ const TicketOrder = () => import('@/page/TicketOrder')
 const OrderDetail = () => import('@/page/OrderDetail')
 const ShopClose = () => import('@/page/error/ShopClose')
 const ServerError = () => import('@/page/error/ServerError')
+const SearchCity = () => import('@/page/SearchCity')
+const SearchMain = () => import('@/page/SearchMain')
+const viewLargeImages = () => import('@/page/viewLargeImages')
 
 const router = new Router({
   routes: [
@@ -131,6 +132,21 @@ const router = new Router({
       path: '/ticket/orderdetail',
       name: 'orderdetail',
       component: OrderDetail
+    },
+    {
+      path: '/search/city',
+      name: 'searchcity',
+      component: SearchCity
+    },
+    {
+      path: '/search/main',
+      name: 'searchmain',
+      component: SearchMain
+    },
+    {
+      path: '/viewlargeimages',
+      name: 'viewlargeimages',
+      component: viewLargeImages
     }
   ],
   scrollBehavior (to, from, savedPosition) {
@@ -148,7 +164,10 @@ router.beforeEach((to, from, next) => {
   weuiWrap.forEach(item => {
     item.click()
   })
-  // 登录状态检测，这里不能完全判断用户的登录状态，还依赖服务端的session过期
+  if (to.name === 'my' && (from.name !== 'bindmobile' && from.name)) {
+    sessionStorage.removeItem('cburl')
+  }
+  // 登录状态检测，这里不能完全判断用户的登录状态，还依赖服务端的session过期，对每个请求做拦截
   let user = localStorage.getItem('user')
   if (!user && to.meta.needLogin) {
     sessionStorage.setItem('cburl', to.path)

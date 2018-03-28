@@ -32,9 +32,10 @@
 // const Host = "http://10.112.5.33:8082/weshopclient";
 // const Host = "http://10.200.5.119:8082/weshopclient";
 // const Host = "http://10.112.1.86:8082/weshopclient";
-const Host = "http://1s960h2139.51mypc.cn/weshopclient";
+// const Host = "http://1s960h2139.51mypc.cn/weshopclient";
+const Host = '/weshopclient'
 export default {
-    //微店首页接口
+    // 微店首页接口
     weshopHome: {
         getStoreInfo: Host + '/ws/getStoreInfo',
         getAdvertise: Host + '/ws/getAdvertise',
