@@ -1,7 +1,6 @@
 'use strict'
 
 const path = require('path')
-
 module.exports = {
   dev: {
 
@@ -48,7 +47,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: '',
-    assetsPublicPath: process.env.NODE_ENV === 'testing' ? '//1s960h2139.51mypc.cn/h5/busi/weshop/' : '//pics.lvjs.com.cn/fed/webapp/busi/weshop/',
+    assetsPublicPath: process.env.ASSET_PATH,
 
     // common res
     commonResource: {

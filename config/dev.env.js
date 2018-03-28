@@ -3,6 +3,9 @@ const prodEnv = require('./prod.env')
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
-  API_BASE: '"http://1s960h2139.51mypc.cn/weshopclient"',
-  API_SIGNAL: '""'
+  DOMAIN:'"1s960h2139.51mypc.cn"',
+  APPID:'"wxbd01848a518c18c0"',
+  API_BASE: '"/weshopclient"',
+  API_SIGNAL: '""',
+  ASSET_PATH: '/'
 })
