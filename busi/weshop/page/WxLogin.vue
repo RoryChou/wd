@@ -1,7 +1,7 @@
 <template>
     <div class="page" :class="{show:c_PageShow}">
         <i class="logo"></i>
-        <a class="wx-login" href="http://1s960h2139.51mypc.cn/wechatgateway/oauth2/authorizeuserinfo?appid=wxbd01848a518c18c0&callback=http://1s960h2139.51mypc.cn/weshopclient/member/callback">微信登录</a>
+        <a class="wx-login" :href="aHref">微信登录</a>
         <!--<a class="wx-login" href="http://10.112.1.86:8082/weshopclient/member/callback?openid=o4yzB1Nx5V158I4hA4ymhQDtJ6vg&appid=wxbd01848a518c18c0">微信登录</a>-->
         <!--<a class="wx-login" @click="toFake" href="javascript:">微信登录</a>-->
     </div>
@@ -20,8 +20,13 @@
       setTimeout(() => {
         this.c_PageShow = true
       }, 10)
+    },
+    computed: {
+      aHref () {
+        // return ''
+        return '/wechatgateway/oauth2/authorizeuserinfo?appid=' + process.env.APPID + '&callback=http://' + process.env.DOMAIN + '/weshopclient/member/callback'
+      }
     }
-
   }
 </script>
 

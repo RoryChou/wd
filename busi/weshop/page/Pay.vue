@@ -77,10 +77,10 @@
       <div class="weui-dialog">
         <div class="weui-dialog__bd">
           <i class="weui-icon-warn"></i>
-          支付失败
+          {{errorMsg}}
         </div>
         <div class="weui-dialog__ft">
-          <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary" @click="handlerPayError">知道了</a>
+          <a class="weui-dialog__btn weui-dialog__btn_primary" @click="handlerPayError">知道了</a>
         </div>
       </div>
     </div>
@@ -105,8 +105,8 @@
         clientHeight: document.documentElement.clientHeight,
         yearMonthList: [],
         orderinfo: null,
-        // remainderPaymentTime: 1800
-        remainderPaymentTime: 5
+        remainderPaymentTime: 1800,
+        errorMsg: '支付失败'
       }
     },
     computed: {
@@ -152,10 +152,63 @@
     methods: {
       payItNow: function () {
 
+        //是否已过 支付截止时间
         if (this.remainderPaymentTime > 0) {
-          this.toHas()
+
+          {
+            let ret = this.tryOrderStatus()
+            if (ret === false) {
+              return
+            }
+          }
+
+          {
+            let ret = this.tryOrderPrice()
+            if (ret === false) {
+              return
+            }
+          }
+
+          this.onBridgeReady()
         } else {
+          //超时
+
+          this.errorMsg = '已过支付截止时间，无法支付'
           this.showPayError = true
+        }
+      },
+      //订单状态是否 正常且未支付
+      tryOrderStatus: function () {
+
+        //AJAX获取订单状态
+        let orderStatus = true
+
+        //订单状态是否 正常且未支付
+        if (orderStatus === true) {
+
+          return true
+        } else {
+
+          this.errorMsg = '当前订单状态为xxx，无法支付'
+          this.showPayError = true
+
+          return false
+        }
+
+      },
+      //订单总额 是否匹配
+      tryOrderPrice: function () {
+
+        let newOrderPrice = 123
+        let oldOrderPrice = 123
+
+        if (newOrderPrice === oldOrderPrice) {
+          return true
+        } else {
+          this.errorMsg = '订单总额不匹配，无法支付'
+          this.showPayError = true
+
+          return false
         }
 
       },
@@ -164,6 +217,50 @@
       },
       handlerPayError: function () {
         this.showPayError = false
+      },
+      onBridgeReady: function () {
+        let self = this
+        WeixinJSBridge.invoke(
+          'getBrandWCPayRequest', {
+            'appId': 'wx2421b1c4370ec43b',     //公众号名称，由商户传入
+            'timeStamp': '1395712654',         //时间戳，自1970年以来的秒数
+            'nonceStr': 'e61463f8efa94090b1f366cccfbbb444', //随机串
+            'package': 'prepay_id=u802345jgfjsdfgsdg888',
+            'signType': 'MD5',         //微信签名方式：
+            'paySign': '70EA570631E4BB79628FBCA90534C63FF7FADD89' //微信签名
+          },
+          function (res) {
+
+            //调用失败
+            if (res.errMsg.indexOf('chooseWXPay:fail') !== -1) {
+
+              self.errorMsg = res.errMsg.replace('chooseWXPay:fail, ', '支付失败，失败原因：')
+
+              self.showPayError = true
+              return
+            }
+
+            //支付失败
+            if (res.err_msg === 'get_brand_wcpay_request:fail') {
+              self.errorMsg ='支付失败'
+              self.showPayError = true
+              return
+            }
+
+            //支付过程中用户取消
+            if (res.err_msg === 'get_brand_wcpay_request:cancel') {
+
+              self.errorMsg ='支付过程中用户取消'
+              self.showPayError = true
+              return
+            }
+
+            //支付成功
+            if (res.err_msg === 'get_brand_wcpay_request:ok') {
+              self.toHas()
+            }     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+          }
+        )
       }
     }
   }

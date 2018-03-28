@@ -122,8 +122,9 @@
             if (cbUrl) {
               sessionStorage.removeItem('cburl')
               this.$router.push(cbUrl)
+            } else {
+              this.isLogin = true
             }
-            this.isLogin = true
           } else {
             localStorage.removeItem('user')
             this.member = {
