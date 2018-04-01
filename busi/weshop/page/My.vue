@@ -117,6 +117,7 @@
         }).then(res => {
           if (res.data.success) {
             this.member = res.data.infos[0]
+              sessionStorage.setItem('memberId', self.member.memberId)
             localStorage.setItem('user', JSON.stringify(this.member))
             let cbUrl = sessionStorage.getItem('cburl')
             if (cbUrl) {

@@ -13,141 +13,22 @@
     <div class="page-panel" :class="{noscroll:noscroll}" :style="{minHeight:clientHeight+'px'}">
       <!--有订单情况-->
       <div class="order-list" v-if="orderList.length">
-        <template v-for="order in orderList">
-          <!--景点门票订单-->
-          <div class="order-item" v-if="order.productType==='TICKET'">
-            <div class="order-hd wd-bd-bottom">
-              <i class="menpiao"></i>
-              <h3>门票</h3>
-              <label>{{order.orderStatusShow}}</label>
-            </div>
-            <div class="order-bd">
-              <div class="order-title">
-                <div class="name">{{order.orderName}}</div>
-                <div class="price"><i>¥</i>{{(parseInt(order.orderAmount) / 100).toFixed(2)}}</div>
-              </div>
-              <p>数量：{{order.quantity}}</p>
-              <p>入住日期：{{order.visitTimeText}}</p>
-              <div class="btns">
-                  <a v-if="order.cancelFlag" class="weui-btn weui-btn_default" @click="handleCancelOrder">取消订单</a>
-                  <a v-if="order.payFlag" class="weui-btn weui-btn_primary">立即支付</a>
-                  <a v-if="order.smsFlag" class="weui-btn weui-btn_default">重发短信</a>
-              </div>
-            </div>
-          </div>
-          <!--酒店订单-->
-          <!--<div class="order-item">
-              <div class="order-hd wd-bd-bottom">
-                  <i class="jiudian"></i>
-                  <h3>酒店</h3>
-                  <label>待支付</label>
-              </div>
-              <div class="order-bd">
-                  <div class="order-title">
-                      <div class="name">上海龙之梦大酒店</div>
-                      <div class="price"><i>¥</i>788</div>
-                  </div>
-                  <p>房间类型：标准房 1间</p>
-                  <p>入住日期：2017-10-28 住1晚</p>
-              </div>
-          </div>-->
-          <!--自由行订单-->
-          <!--<div class="order-item">
-              <div class="order-hd wd-bd-bottom">
-                  <i class="ziyouxing"></i>
-                  <h3>自由行</h3>
-                  <label>待支付</label>
-              </div>
-              <div class="order-bd">
-                  <div class="order-title">
-                      <div class="name">上海龙之梦大酒店</div>
-                      <div class="price"><i>¥</i>788</div>
-                  </div>
-                  <p>房间类型：标准房 1间</p>
-                  <p>入住日期：2017-10-28 住1晚</p>
-              </div>
-          </div>-->
-          <!--邮轮订单-->
-          <!--<div class="order-item">
-              <div class="order-hd wd-bd-bottom">
-                  <i class="youlun"></i>
-                  <h3>邮轮</h3>
-                  <label>待支付</label>
-              </div>
-              <div class="order-bd">
-                  <div class="order-title">
-                      <div class="name">上海龙之梦大酒店</div>
-                      <div class="price"><i>¥</i>788</div>
-                  </div>
-                  <p>房间类型：标准房 1间</p>
-                  <p>入住日期：2017-10-28 住1晚</p>
-              </div>
-          </div>-->
-          <!--签证订单-->
-          <!--<div class="order-item">
-              <div class="order-hd wd-bd-bottom">
-                  <i class="qianzheng"></i>
-                  <h3>签证</h3>
-                  <label>待支付</label>
-              </div>
-              <div class="order-bd">
-                  <div class="order-title">
-                      <div class="name">上海龙之梦大酒店</div>
-                      <div class="price"><i>¥</i>788</div>
-                  </div>
-                  <p>房间类型：标准房 1间</p>
-                  <p>入住日期：2017-10-28 住1晚</p>
-              </div>
-          </div>-->
-          <!--跟团游订单-->
-          <!--<div class="order-item">
-              <div class="order-hd wd-bd-bottom">
-                  <i class="gengtuanyou"></i>
-                  <h3>跟团游</h3>
-                  <label>待支付</label>
-              </div>
-              <div class="order-bd">
-                  <div class="order-title">
-                      <div class="name">上海龙之梦大酒店</div>
-                      <div class="price"><i>¥</i>788</div>
-                  </div>
-                  <p>房间类型：标准房 1间</p>
-                  <p>入住日期：2017-10-28 住1晚</p>
-              </div>
-          </div>-->
-          <!--当地游订单-->
-          <!--<div class="order-item">
-              <div class="order-hd wd-bd-bottom">
-                  <i class="dangdiyou"></i>
-                  <h3>当地游</h3>
-                  <label>待支付</label>
-              </div>
-              <div class="order-bd">
-                  <div class="order-title">
-                      <div class="name">上海龙之梦大酒店</div>
-                      <div class="price"><i>¥</i>788</div>
-                  </div>
-                  <p>房间类型：标准房 1间</p>
-                  <p>入住日期：2017-10-28 住1晚</p>
-              </div>
-          </div>-->
-          <!--酒店套餐订单-->
-          <!--<div class="order-item">
-              <div class="order-hd wd-bd-bottom">
-                  <i class="jiudiantaocan"></i>
-                  <h3>酒店套餐</h3>
-                  <label>待支付</label>
-              </div>
-              <div class="order-bd">
-                  <div class="order-title">
-                      <div class="name">上海龙之梦大酒店</div>
-                      <div class="price"><i>¥</i>788</div>
-                  </div>
-                  <p>房间类型：标准房 1间</p>
-                  <p>入住日期：2017-10-28 住1晚</p>
-              </div>
-          </div>-->
+        <template v-for="(order, index) in orderList">
+          <OrderItem :order="order" :index="index"
+                     v-on:updateOrder="updateOrder"
+                     v-on:cancelingOrder="cancelingOrder"
+                     v-on:showCommonAlert="showCommonAlert"
+          />
         </template>
+
+        <!--加载中-->
+        <div class="loading" v-if="showLoading">
+          <div class="weui-loadmore">
+            <i class="weui-loading"></i>
+            <span class="weui-loadmore__tips">正在加载</span>
+          </div>
+        </div>
+
       </div>
       <!--没有订单情况-->
       <div class="no-records" v-if="!orderList.length">
@@ -155,6 +36,18 @@
         <p>亲，您还没有相关订单哦～</p>
       </div>
     </div>
+
+    <!--页面通用提示-->
+    <div class="js_dialog" style="opacity: 1;" v-if="showCommonAlertFlag">
+      <div class="weui-mask"></div>
+      <div class="weui-dialog">
+        <div class="weui-dialog__bd">{{commonAlertMsg}}</div>
+        <div class="weui-dialog__ft">
+          <a href="javascript:" @click="hideCommonAlert" class="weui-dialog__btn weui-dialog__btn_primary">知道了</a>
+        </div>
+      </div>
+    </div>
+
   </section>
 </template>
 
@@ -163,15 +56,52 @@
   import axios from 'axios'
   import cm from '../cm'
   import * as utils from '../util/utils'
+  import OrderItem from '../components/myorders/OrderItem'
 
   const pageSize = 10
   let pageNo = 1
+  let maxPageNo = 1
+  let count = 1
+  let pageStatus = 'loaded'
+
+  let scrollFlag = true
+
+  function getWindowHeight () {
+    return document.documentElement.clientHeight
+  }
+
+  function getScrollTop () {
+    let bodyScrollTop = 0
+    let documentScrollTop = 0
+
+    //body
+    let body = document.body
+    if (body) {
+      bodyScrollTop = body.scrollTop
+    }
+
+    //html
+    let documentElement = document.documentElement
+    if (documentElement) {
+      documentScrollTop = documentElement.scrollTop
+    }
+
+    if (bodyScrollTop > documentScrollTop) {
+      return bodyScrollTop
+    } else {
+      return documentScrollTop
+    }
+  }
 
   export default {
     name: 'my-orders',
+    components: {
+      OrderItem
+    },
     data () {
       return {
         c_PageShow: false,
+        showLoading: true,
         c_OrderTypes: [
           {
             id: 0,
@@ -215,42 +145,35 @@
         noscroll: false,
         clientHeight: document.documentElement.clientHeight,
 
+        showCommonAlertFlag: false,
+        commonAlertMsg: '',
         //订单列表
         orderList: []
       }
     },
     mounted () {
+      let self = this
       setTimeout(() => {
         this.c_PageShow = true
       }, 10)
       utils.setTitle('我的订单')
 
       this.renderOrderListData()
+
+      document.addEventListener('scroll', function () {
+        if (scrollFlag === false) {
+          return
+        }
+        scrollFlag = false
+        setTimeout(function () {
+          scrollFlag = true
+          self.isPageBottom()
+        }, 300)
+      })
     },
 
     methods: {
-      handleCancelOrder: function () {
-        this.noscroll = true
-        weui.confirm('您是否要取消该订单吗', {
-          className: 'weui-wrap',
-          buttons: [{
-            label: '我再想想',
-            type: 'default',
-            onClick: () => {
-              console.log('no')
-              this.noscroll = false
-            }
-          },
-            {
-              label: '取消订单',
-              type: 'primary',
-              onClick: () => {
-                console.log('yes')
-                this.noscroll = false
-              }
-            }]
-        })
-      },
+
       handleClickTabsMore: function () {
         this.tabsOpen = !this.tabsOpen
         this.noscroll = this.tabsOpen
@@ -286,6 +209,22 @@
        * 添加订单列表数据
        */
       addOrderListData: function () {
+        let self = this
+        if (self.showLoading === false) {
+          return
+        }
+
+        if (pageStatus === 'loading') {
+          return
+        }
+
+        if (pageNo > maxPageNo) {
+          self.showLoading = false
+          return
+        }
+
+        pageStatus = 'loading'
+
         // 假装拉取数据
         let url = 'http://10.112.5.54:8082/weshopclient/order/list'
         axios.get(url, {
@@ -295,13 +234,80 @@
           }
         }).then(res => {
           let resData = res.data
+          console.log(resData)
           if (resData.success) {
-            console.log(resData)
 
-            this.orderList = this.orderList.concat(resData.infos)
+            count = resData.totalCount
+            maxPageNo = Math.ceil(count / pageSize)
+
+            for (let i = 0; i < resData.infos.length; i++) {
+              let info = resData.infos[i]
+              info.statusIsLoading = false
+              self.orderList.push(info)
+            }
+
+            pageNo += 1
+            pageStatus = 'loaded'
           }
         })
 
+      },
+
+      //是否滚动到底部
+      isPageBottom: function () {
+        let scrollTop = getScrollTop()
+
+        let bodyHeight = document.body.offsetHeight
+        let windowHeight = getWindowHeight()
+
+        let diff = bodyHeight - windowHeight - scrollTop
+
+        if (diff < 100) {
+          this.addOrderListData()
+        }
+      },
+
+      showCommonAlert: function (msg) {
+        this.commonAlertMsg = msg
+        this.showCommonAlertFlag = true
+      },
+      hideCommonAlert: function () {
+        this.showCommonAlertFlag = false
+      },
+      updateOrder: function (options) {
+        let self = this
+        let index = options.index
+        console.log(index)
+
+        let order = this.orderList[index]
+        order.statusIsLoading = false
+        let vstOrderId = order.vstOrderId
+
+        let url = 'http://10.112.5.54:8082/weshopclient/order/getById'
+        axios.get(url, {
+          params: {
+            vstOrderId: vstOrderId,
+            pageSize: pageSize,
+            pageNo: 1
+          }
+        }).then(res => {
+
+          let resData = res.data
+          if(resData.success) {
+
+            let info = resData.infos[0]
+            info.statusIsLoading = false
+            self.orderList.push(info)
+
+          }
+        })
+
+      },
+      cancelingOrder: function (options) {
+        let index = options.index
+        console.log(index)
+
+        this.orderList[index].statusIsLoading = true
       }
     }
   }
@@ -509,114 +515,5 @@
     padding: 10px 0;
   }
 
-  .order-item {
-    background: #FFFFFF;
-    padding: 0 15px;
-    margin-bottom: 10px;
-  }
 
-  .order-hd {
-    height: 40px;
-    font-size: 14px;
-    color: #666666;
-    display: flex;
-    align-items: center;
-    i {
-      display: block;
-      width: 20px;
-      height: 20px;
-      margin-right: 5px;
-      &.menpiao {
-        background: url("../images/menpiao-icon-1.png") no-repeat center;
-        background-size: 100%;
-      }
-      &.jiudian {
-        background: url("../images/jiudian-cion-1.png") no-repeat center;
-        background-size: 100%;
-      }
-      &.ziyouxing {
-        background: url("../images/ziyouxing-icon-1.png") no-repeat center;
-        background-size: 100%;
-      }
-      &.youlun {
-        background: url("../images/youlun-icon-1.png") no-repeat center;
-        background-size: 100%;
-      }
-      &.qianzheng {
-        background: url("../images/qianzheng-icon-1.png") no-repeat center;
-        background-size: 100%;
-      }
-      &.gengtuanyou {
-        background: url("../images/gengtuan-icon-1.png") no-repeat center;
-        background-size: 100%;
-      }
-      &.dangdiyou {
-        background: url("../images/dangdi-icon-1.png") no-repeat center;
-        background-size: 100%;
-      }
-      &.jiudiantaocan {
-        background: url("../images/jiudiantaocan-icon-1.png") no-repeat center;
-        background-size: 100%;
-      }
-    }
-    h3 {
-      font-size: 14px;
-      flex: 1;
-    }
-    label {
-      font-size: 12px;
-    }
-  }
-
-  .order-bd {
-    padding: 10px 0;
-    p {
-      font-size: 12px;
-      color: #999999;
-    }
-    .btns {
-      margin-top: 5px;
-      display: flex;
-      justify-content: flex-end;
-      .weui-btn {
-        flex: none;
-        margin: 0;
-        height: 27px;
-        line-height: 27px;
-        font-size: 13px;
-        border-radius: 100px;
-        margin-left: 10px;
-        &:after {
-          border-radius: 100px;
-        }
-      }
-      .weui-btn_default {
-        color: #666666;
-      }
-    }
-  }
-
-  .order-title {
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
-    .name {
-      font-size: 15px;
-      color: #333333;
-      flex: 1;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
-    }
-    .price {
-      font-size: 18px;
-      color: #FF6600;
-      margin-left: 20px;
-      i {
-        font-size: 12px;
-        font-style: normal;
-        margin-right: 2px;
-      }
-    }
-  }
 </style>

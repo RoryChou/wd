@@ -220,6 +220,13 @@
       },
       onBridgeReady: function () {
         let self = this
+
+        if (typeof WeixinJSBridge === 'undefined') {
+          self.errorMsg = '请在微信中使用'
+          self.showPayError = true
+          return
+        }
+
         WeixinJSBridge.invoke(
           'getBrandWCPayRequest', {
             'appId': 'wx2421b1c4370ec43b',     //公众号名称，由商户传入
@@ -242,7 +249,7 @@
 
             //支付失败
             if (res.err_msg === 'get_brand_wcpay_request:fail') {
-              self.errorMsg ='支付失败'
+              self.errorMsg = '支付失败'
               self.showPayError = true
               return
             }
@@ -250,7 +257,7 @@
             //支付过程中用户取消
             if (res.err_msg === 'get_brand_wcpay_request:cancel') {
 
-              self.errorMsg ='支付过程中用户取消'
+              self.errorMsg = '支付过程中用户取消'
               self.showPayError = true
               return
             }

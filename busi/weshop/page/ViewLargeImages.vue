@@ -9,7 +9,7 @@
     <div class="banner" ref="banner">
       <section class="swiper-wrap">
         <swiper :options="c_SwiperOption" ref="mySwiper">
-          <swiper-slide v-for="image in imageList">
+          <swiper-slide v-for="(image, index) in imageList" :key="index">
             <a>
               <img
                 v-bind:data-src="image.url"
