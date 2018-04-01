@@ -5,7 +5,7 @@
     </div>
     <div class="srcoll-tabs-wrap" :class="{fixed:tabToTop<=0}">
       <div class="srcoll-tabs">
-        <a v-for="(item, index) in recommendCategoryTypesCN" :class="{active: item === categoryActiveTypeCN}" @click="changeActive(item,index)">{{item}}</a>
+        <a v-for="(item, index) in recommendCategoryTypesCN" :key="index" :class="{active: item === categoryActiveTypeCN}" @click="changeActive(item,index)">{{item}}</a>
       </div>
     </div>
     <div class="recom-list">
@@ -43,30 +43,29 @@
       return {
         tabOffsetTop: 1000,
         loadMoreOffsetTop: 1000,
-        recommendList: [],//店铺推荐列表
-        recommendCategoryTypesCN: [],//店铺推荐品类中文
-        recommendCategoryTypesEN: [],//店铺推荐品类英文
-        categoryActiveTypeCN: "",//店主选中推荐品类中文
-        categoryActiveTypeEN: "",//店主选中推荐品类英文
-        pageNo: 1,//推荐位产品默认第一页
-        pageSize: 12,//每此下拉展示12条数据
-        recommendProds: [],//推荐位产品列表
-        isLoading: false,//是否有产品加载
-        interceptType: false//拦截多次加载请求
+        recommendList: [], // 店铺推荐列表
+        recommendCategoryTypesCN: [], // 店铺推荐品类中文
+        recommendCategoryTypesEN: [], // 店铺推荐品类英文
+        categoryActiveTypeCN: '', // 店主选中推荐品类中文
+        categoryActiveTypeEN: '', // 店主选中推荐品类英文
+        pageNo: 1, // 推荐位产品默认第一页
+        pageSize: 12, // 每此下拉展示12条数据
+        recommendProds: [], // 推荐位产品列表
+        isLoading: false, // 是否有产品加载
+        interceptType: false // 拦截多次加载请求
       }
     },
-    
     mounted () {
-      this.init();
+      this.init()
     },
     methods: {
       init () {
-        const self = this;
-        if(sessionStorage.getItem('categoryActiveTypeEN')){
+        const self = this
+        if (sessionStorage.getItem('categoryActiveTypeEN')) {
           self.categoryActiveTypeEN = sessionStorage.getItem('categoryActiveTypeEN')
           console.log(self.categoryActiveTypeEN)
         }
-        if(sessionStorage.getItem(self.categoryActiveTypeEN)){
+        if (sessionStorage.getItem(self.categoryActiveTypeEN)) {
           self.recommendList = JSON.parse(sessionStorage.getItem('recommendList'))
           console.log(self.recommendList)
           self.recommendCategoryTypesEN = JSON.parse(sessionStorage.getItem('recommendCategoryTypesEN'))
@@ -81,26 +80,26 @@
           console.log(self.isLoading)
           self.interceptType = JSON.parse(sessionStorage.getItem('interceptType'))
           console.log(self.interceptType)
-        }else{
-          self.getRecommendList();
+        } else {
+          self.getRecommendList()
         }
       },
-      //获取推荐位列表(店主推荐/...)
+      // 获取推荐位列表(店主推荐/...)
       getRecommendList () {
-        const self = this;
-        axios.get(cm.weshopHome.getRecommendList,{params:{
+        const self = this
+        axios.get(cm.weshopHome.getRecommendList, {params: {
           userId: self.userId
         }}).then(res => {
-          if(res && res.data && res.data.infos){
-            self.recommendList = res.data.infos;
-            sessionStorage.setItem('recommendList',JSON.stringify(self.recommendList));
-            console.log("推荐位列表recommendList:");
-            console.log(self.recommendList);
-            self.getRecommendCategoryTypes(self.recommendList[0].recommendId);
+          if (res && res.data && res.data.infos) {
+            self.recommendList = res.data.infos
+            sessionStorage.setItem('recommendList', JSON.stringify(self.recommendList))
+            console.log('推荐位列表recommendList:')
+            console.log(self.recommendList)
+            self.getRecommendCategoryTypes(self.recommendList[0].recommendId)
           }
         })
       },
-      //获取某推荐位所有品类(景点门票/...)
+      // 获取某推荐位所有品类(景点门票/...)
       getRecommendCategoryTypes (recommendId) {
         const self = this
         axios.get(cm.weshopHome.getRecommendCategoryTypes, {
@@ -114,23 +113,23 @@
               if (item === 'TICKET') {
                 self.recommendCategoryTypesCN.push('景点门票')
               }
-              if(item==='HOTEL'){
-                self.recommendCategoryTypesCN.push('酒店');
+              if (item === 'HOTEL') {
+                self.recommendCategoryTypesCN.push('酒店')
               }
-              if(item==='ROUTE_FREEDOM'){
-                self.recommendCategoryTypesCN.push('自由行');
+              if (item === 'ROUTE_FREEDOM') {
+                self.recommendCategoryTypesCN.push('自由行')
               }
-              if(item==='ROUTE_LOCAL'){
-                self.recommendCategoryTypesCN.push('当地游');
+              if (item === 'ROUTE_LOCAL') {
+                self.recommendCategoryTypesCN.push('当地游')
               }
-              if(item==='ROUTE_GROUP'){
-                self.recommendCategoryTypesCN.push('跟团游');
+              if (item === 'ROUTE_GROUP') {
+                self.recommendCategoryTypesCN.push('跟团游')
               }
-              if(item==='ROUTE_HOTEL_COMB'){
-                self.recommendCategoryTypesCN.push('酒店套餐');
+              if (item === 'ROUTE_HOTEL_COMB') {
+                self.recommendCategoryTypesCN.push('酒店套餐')
               }
-              if(item==='COMB_CRUISE'){
-                self.recommendCategoryTypesCN.push('邮轮');
+              if (item === 'COMB_CRUISE') {
+                self.recommendCategoryTypesCN.push('邮轮')
               }
               if (item === 'VISA') {
                 self.recommendCategoryTypesCN.push('签证')
@@ -150,86 +149,87 @@
           }
         })
       },
-      //获取某个品类的所有产品(迪士尼/...)
+      // 获取某个品类的所有产品(迪士尼/...)
       getRecommendProds (recommendId) {
-        const self = this;
-         axios.get(cm.weshopHome.getRecommendProds,{params:{
+        const self = this
+         axios.get(cm.weshopHome.getRecommendProds, {params: {
           recommendId: recommendId,
           productType: self.categoryActiveTypeEN,
           pageSize: self.pageSize,
-          pageNo: self.pageNo
+          pageNo: self.pageNo,
+          userId: self.userId
         }}).then(res => {
-          if(res && res.data && res.data.infos){
-            if(self.recommendProds){
-              res.data.infos.forEach((item, index)=>{
+          if (res && res.data && res.data.infos) {
+            if (self.recommendProds) {
+              res.data.infos.forEach((item, index) => {
                 self.recommendProds.push(item)
               })
-            }else{
-              self.recommendProds = res.data.infos;
+            } else {
+              self.recommendProds = res.data.infos
             }
-            let totalCount = res.data.totalCount;
-            console.log("推荐位：")
+            let totalCount = res.data.totalCount
+            console.log('推荐位：')
             console.log(self.recommendProds)
-            console.log("totalCount:"+totalCount)
-            console.log("pageNo:"+self.pageNo)
-            //判断是否加载更多
-            if(totalCount > self.pageSize*self.pageNo){
-              self.isLoading = true;
-            }else{
-              self.isLoading = false;
+            console.log('totalCount:' + totalCount)
+            console.log('pageNo:' + self.pageNo)
+            // 判断是否加载更多
+            if (totalCount > self.pageSize * self.pageNo) {
+              self.isLoading = true
+            } else {
+              self.isLoading = false
             }
           }
-          self.interceptType = false;
-          sessionStorage.setItem(self.categoryActiveTypeEN,JSON.stringify(self.recommendProds));//每个品类的推荐位由品类英文名称对应的布尔值决定
-          sessionStorage.setItem(self.categoryActiveTypeCN,JSON.stringify(self.isLoading));//每个品类是否加载由品类中文名称对应的布尔值决定
-          sessionStorage.setItem('interceptType',JSON.stringify(self.interceptType));
+          self.interceptType = false
+          sessionStorage.setItem(self.categoryActiveTypeEN, JSON.stringify(self.recommendProds))// 每个品类的推荐位由品类英文名称对应的布尔值决定
+          sessionStorage.setItem(self.categoryActiveTypeCN, JSON.stringify(self.isLoading))// 每个品类是否加载由品类中文名称对应的布尔值决定
+          sessionStorage.setItem('interceptType', JSON.stringify(self.interceptType))
         })
       },
       changeActive (item, index) {
-        const self = this;
-        self.categoryActiveTypeCN = item;
-        self.categoryActiveTypeEN = self.recommendCategoryTypesEN[index];
-        self.pageNo = 1;
-        self.recommendProds = [];
-        if(sessionStorage.getItem(self.categoryActiveTypeEN)){
+        const self = this
+        self.categoryActiveTypeCN = item
+        self.categoryActiveTypeEN = self.recommendCategoryTypesEN[index]
+        self.pageNo = 1
+        self.recommendProds = []
+        if (sessionStorage.getItem(self.categoryActiveTypeEN)) {
           self.recommendProds = JSON.parse(sessionStorage.getItem(self.categoryActiveTypeEN))
-        }else{
-          self.getRecommendProds(self.recommendList[0].recommendId);
+        } else {
+          self.getRecommendProds(self.recommendList[0].recommendId)
         }
         self.isLoading = JSON.parse(sessionStorage.getItem(self.categoryActiveTypeCN))
-        self.interceptType = false;
-        sessionStorage.setItem('categoryActiveTypeCN',self.categoryActiveTypeCN);
-        sessionStorage.setItem('categoryActiveTypeEN',self.categoryActiveTypeEN);
-      },
+        self.interceptType = false
+        sessionStorage.setItem('categoryActiveTypeCN', self.categoryActiveTypeCN)
+        sessionStorage.setItem('categoryActiveTypeEN', self.categoryActiveTypeEN)
+      }
     },
     watch: {
       scrollTop: function () {
-        const self = this;
-        self.tabOffsetTop = self.$refs.tabs.offsetTop + 44;
-        console.log("滚动距离"+self.scrollTop);
-        console.log("窗口高度"+self.clientHeight);
-        console.log("页面高度"+self.scrollHeight);
-        let aaa = self.scrollTop + self.clientHeight + 66 - self.scrollHeight;
+        const self = this
+        self.tabOffsetTop = self.$refs.tabs.offsetTop + 44
+        console.log('滚动距离' + self.scrollTop)
+        console.log('窗口高度' + self.clientHeight)
+        console.log('页面高度' + self.scrollHeight)
+        let aaa = self.scrollTop + self.clientHeight + 66 - self.scrollHeight
         console.log(aaa)
-        if(self.isLoading){
-          if(aaa>0){
+        if (self.isLoading) {
+          if (aaa > 0) {
             console.log(self.interceptType)
-            if(self.interceptType){
-              return;
+            if (self.interceptType) {
+              return
             }
-            self.interceptType = true;
-            self.pageNo = self.pageNo + 1;
-            self.getRecommendProds();
+            self.interceptType = true
+            self.pageNo = self.pageNo + 1
+            self.getRecommendProds()
           }
         }
       }
     },
     computed: {
       tabToTop: function () {
-        const self = this;
-        //监听了父组件的tabToTop事件：@tabToTop
-        this.$emit('tabtotop', this.tabOffsetTop - this.scrollTop);
-        return this.tabOffsetTop - this.scrollTop;
+        const self = this
+        // 监听了父组件的tabToTop事件：@tabToTop
+          self.$emit('tabtotop', this.tabOffsetTop - this.scrollTop)
+        return self.tabOffsetTop - self.scrollTop
       }
     }
   }
