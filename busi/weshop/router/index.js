@@ -25,7 +25,7 @@ const ShopClose = () => import('@/page/error/ShopClose')
 const ServerError = () => import('@/page/error/ServerError')
 const SearchCity = () => import('@/page/SearchCity')
 const SearchMain = () => import('@/page/SearchMain')
-const viewLargeImages = () => import('@/page/viewLargeImages')
+const ViewLargeImages = () => import('@/page/ViewLargeImages')
 
 const router = new Router({
   routes: [
@@ -146,7 +146,7 @@ const router = new Router({
     {
       path: '/viewlargeimages',
       name: 'viewlargeimages',
-      component: viewLargeImages
+      component: ViewLargeImages
     }
   ],
   scrollBehavior (to, from, savedPosition) {

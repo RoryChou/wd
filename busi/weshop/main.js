@@ -1,5 +1,6 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+import '@/util/polyfill'
 import Vue from 'vue'
 import FastClick from 'fastclick'
 import App from './App'
@@ -12,11 +13,6 @@ import './style/base.less'
 
 // add fastclick to remove click delays on browsers with touch UIs
 FastClick.attach(document.body)
-// if ('addEventListener' in document) {
-//   document.addEventListener('DOMContentLoaded', function () {
-//     FastClick.attach(document.body)
-//   }, false)
-// }
 
 Vue.config.productionTip = false
 // register global components
