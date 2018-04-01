@@ -5,8 +5,9 @@
   "private": true,
   "scripts": {
     "devWeshop": "cross-env NODE_ENV=development webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "buildWeshop": "cross-env NODE_ENV=testing node build/build.js",
-    "prodWeshop": "cross-env NODE_ENV=production node build/build.js",
+    "buildTestWeshop": "cross-env NODE_ENV=testing node build/build.js",
+    "buildFangZhenWeshop": "cross-env NODE_ENV=fangzhen node build/build.js",
+    "buildProdWeshop": "cross-env NODE_ENV=production node build/build.js",
     "start": "npm run devWeshop",
     "lint": "eslint --ext .js,.vue busi/weshop"
   },
